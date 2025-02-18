@@ -49,6 +49,19 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         animator.OnAttackAnimationEnded += Animator_OnAttackAnimationEnded;
+
+        PauseManager.Instance.OnGamePaused += PauseManager_OnGamePaused;
+        PauseManager.Instance.OnGameResumed += PauseManager_OnGameResumed;
+    }
+
+    private void PauseManager_OnGameResumed(object sender, EventArgs e)
+    {
+        ControlledByPlayer = true;
+    }
+
+    private void PauseManager_OnGamePaused(object sender, EventArgs e)
+    {
+        ControlledByPlayer = false;
     }
 
     private void Animator_OnAttackAnimationEnded()
