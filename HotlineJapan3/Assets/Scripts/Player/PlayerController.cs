@@ -78,7 +78,6 @@ public class PlayerController : MonoBehaviour
         if (dashing)
             return;
         HandleMovement();
-        //
     }
 
     private void FixedUpdate()
