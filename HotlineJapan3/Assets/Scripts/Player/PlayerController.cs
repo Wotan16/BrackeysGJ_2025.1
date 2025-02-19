@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
         if (dashing)
             return;
         HandleMovement();
-        HandleRotation();
+        //
     }
 
     private void FixedUpdate()
@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
         {
             HandleDashing();
         }
+        HandleRotation();
     }
 
     private void HandleCooldowns()
@@ -122,9 +123,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleRotation()
     {
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        Vector2 direction = (mouseWorldPosition - transform.position).normalized;
-        transform.up = direction;
+        Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        Vector2 direction = (mouseWorldPosition - rb2D.position).normalized;
+        float rotation = Vector2.Angle(Vector2.up, direction);
+        rotation = mouseWorldPosition.x < rb2D.position.x ? rotation : -rotation;
+        rb2D.MoveRotation(rotation);
     }
 
     private void Attack()
