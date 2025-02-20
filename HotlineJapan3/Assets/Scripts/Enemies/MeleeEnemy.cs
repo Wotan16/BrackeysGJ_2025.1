@@ -1,9 +1,13 @@
 using Pathfinding;
+using System;
 using UnityEngine;
 
 public class MeleeEnemy : EnemyBase
 {
-    private FollowerEntity follower;    
+    private FollowerEntity follower;
+    [SerializeField] private MeleeEnemyAnimator animator;
+    [SerializeField] private float attackCooldown;
+    [SerializeField] private Collider2D coll;
 
     protected override void Start()
     {
@@ -13,7 +17,17 @@ public class MeleeEnemy : EnemyBase
 
     protected override void InitializeStateMachine()
     {
-        return;
+        EmptyState idle = new EmptyState();
+        MeleeChaseState chase = new MeleeChaseState(this, destinationSetter, follower, playerTransform, animator, moveSpeed, attackRange, attackCooldown);
+        DeadState dead = new DeadState(animator, coll);
+
+        Func<bool> AgroCondition() => () => CanSeePlayer();
+        Func<bool> DeathCondition() => () => IsDead;
+
+        stateMachine.AddTransition(idle, chase, AgroCondition());
+        stateMachine.AddAnyTransition(dead, DeathCondition());
+
+        stateMachine.SetState(idle);
     }
 
     protected override void HealthSystem_OnDamaged()

@@ -14,7 +14,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected Transform playerTransform;
     protected StateMachine stateMachine;
 
-    private string currentState;
+    public string CurrentState;
+    public bool IsDead => healthSystem.IsDead;
 
     protected virtual void Awake()
     {
@@ -33,8 +34,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        //stateMachine.Tick();
-        //currentState = stateMachine.CurrentState.ToString();
+        stateMachine.Tick();
+        CurrentState = stateMachine.CurrentState.ToString();
     }
 
     protected abstract void HealthSystem_OnDamaged();
@@ -48,7 +49,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         healthSystem.TakeDamage(damage);
     }
 
-    protected virtual bool CanSeePlayer()
+    public virtual bool CanSeePlayer()
     {
         if (playerTransform == null)
             return false;
@@ -57,15 +58,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (!inVisionRange)
             return false;
 
-        Vector2 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        if(Vector2.Angle(transform.up, directionToPlayer) > visionAngle)
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        float angleToPlayer = Vector2.Angle(transform.up, directionToPlayer);
+        if (angleToPlayer > visionAngle / 2)
             return false;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerTransform.position);
+        float raycastOffset = 0.4f; //So raycast won't hit enemy collider;
+        Vector2 offsetPosition = transform.position + directionToPlayer * raycastOffset;
+        RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer);
         if(hit.collider == null)
             return false;
 
-        return hit.collider.CompareTag("Player");
+        bool hasLineOfSight = hit.collider.CompareTag("Player");
+        return hasLineOfSight;
     }
 
     private void OnDrawGizmos()
@@ -100,6 +105,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         Gizmos.DrawLine(transform.position, transform.position + rightDirection * visionRange);
 
         Gizmos.color = canSeePlayer ? Color.red : Color.blue;
-        Gizmos.DrawWireSphere(transform.position, visionRange);
+        //Gizmos.DrawWireSphere(transform.position, visionRange);
     }
 }
