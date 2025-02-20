@@ -7,9 +7,9 @@ public class PlayerAnimator : MonoBehaviour
 
     [SerializeField] private Animator animator;
     private const string ATTACK_TRIGGER = "Attack";
-    private const string PARRY_BOOL = "IsParrying";
-    private const string DASHING_BOOL = "Dash";
-    private const string MOVING_BOOL = "IsMoving";
+    private const string PARRY_BOOL = "Parrying";
+    private const string DASHING_BOOL = "Dashing";
+    private const string MOVING_BOOL = "Moving";
     private const string DEATH_TRIGGER = "Death";
 
     public void Attack()

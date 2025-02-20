@@ -13,16 +13,16 @@ public class MeleeEnemy : EnemyBase
 
     protected override void InitializeStateMachine()
     {
-        throw new System.NotImplementedException();
+        return;
     }
 
     protected override void HealthSystem_OnDamaged()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Damaged");
     }
 
     protected override void HealthSystem_OnDead()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Dead");
     }
 }

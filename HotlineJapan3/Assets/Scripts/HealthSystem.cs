@@ -25,6 +25,9 @@ public class HealthSystem : MonoBehaviour
 
     public virtual void TakeDamage(int amount)
     {
+        if(IsDead)
+            return;
+
         health -= amount;
 
         if (health <= 0)

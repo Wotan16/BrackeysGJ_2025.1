@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,9 +9,11 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance {  get; private set; }
 
     public bool ControlledByPlayer = true;
+    public bool Invulnerable = false;
 
     [Header("Movement")]
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float defautMoveSpeed;
+    [SerializeField] private float parryingMoveSpeed;
     private Rigidbody2D rb2D;
     private Vector2 mousePosition;
     private Vector2 inputDireciton;
@@ -30,12 +33,17 @@ public class PlayerController : MonoBehaviour
     private float attackCDDelta;
     private bool canAttack => attackCDDelta <= 0;
     private bool attacking;
+    [SerializeField] private float hitboxDuration;
+    private float hitboxDurationDelta;
+    private bool hitboxActive => hitboxDurationDelta <= 0;
+    [SerializeField] private SwordHitbox swordHitbox;
 
     [Header("Parry")]
     [SerializeField] private float parryDuration;
+    private bool parrying;
+    [SerializeField] private float parryCooldown;
     private float parryCDDelta;
     private bool canParry => parryCDDelta <= 0;
-    private bool parrying;
 
     [SerializeField] private PlayerAnimator animator;
     
@@ -44,6 +52,18 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        InitializeSingleton();
+    }
+
+    private void InitializeSingleton()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("More than one " + GetType().Name);
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     private void Start()
@@ -75,6 +95,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleCooldowns();
+        animator.SetMoving(inputDireciton != Vector2.zero);
         if (dashing)
             return;
         HandleMovement();
@@ -105,6 +126,11 @@ public class PlayerController : MonoBehaviour
         {
             attackCDDelta -= Time.deltaTime;
         }
+
+        if (hitboxDurationDelta > 0)
+        {
+            hitboxDurationDelta -= Time.deltaTime;
+        }
     }
 
     private void HandleDashing()
@@ -117,6 +143,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
+        float moveSpeed = parrying ? parryingMoveSpeed : defautMoveSpeed;
         rb2D.linearVelocity = inputDireciton.normalized * moveSpeed;
     }
 
@@ -134,9 +161,19 @@ public class PlayerController : MonoBehaviour
         if (isBusy || !canAttack)
             return;
 
-        parrying = false;
+        InterruptParry();
+        attackCDDelta = attackCooldown;
+        attacking = true;
+        animator.Attack();
+        StartCoroutine(EnableAttackHitbox());
+    }
 
-        //animator.Attack();
+    private IEnumerator EnableAttackHitbox()
+    {
+        swordHitbox.EnableHitbox();
+        yield return new WaitForSeconds(hitboxDuration);
+        swordHitbox.DisableHitbox();
+        attacking = false;
     }
 
     private void Dash()
@@ -146,18 +183,49 @@ public class PlayerController : MonoBehaviour
 
         dashDistanceDelta = 0;
         dashCDDelta = dashCooldown;
-        parrying = false;
+        InterruptParry();
         dashDirection = inputDireciton.normalized;
-        //animator.SetDashing(dashing);
+        animator.SetDashing(dashing);
     }
 
     private void Parry()
     {
-        if(isBusy)
+        if(isBusy || !canParry)
             return;
 
         parrying = true;
-        //animator.SetParrying(parrying);
+        parryCDDelta = parryCooldown;
+        animator.SetParrying(parrying);
+        StartCoroutine(InterruptParryAfterTime());
+    }
+
+    private IEnumerator InterruptParryAfterTime()
+    {
+        yield return new WaitForSeconds(parryDuration);
+        InterruptParry();
+    }
+
+    private void InterruptParry()
+    {
+        parrying = false;
+        animator.SetParrying(parrying);
+    }
+
+    //Vector2 in Action is the direction where player is looking
+    public void TakeDamage(Action<Vector2> OnParried)
+    {
+        if (parrying)
+        {
+            OnParried?.Invoke(transform.up);
+            Debug.Log("Parried");
+            return;
+        }
+
+        if (Invulnerable)
+            return;
+
+        animator.Die();
+        ControlledByPlayer = false;
     }
 
     #region InputEvents

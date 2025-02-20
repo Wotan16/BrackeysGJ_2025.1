@@ -33,8 +33,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        stateMachine.Tick();
-        currentState = stateMachine.CurrentState.ToString();
+        //stateMachine.Tick();
+        //currentState = stateMachine.CurrentState.ToString();
     }
 
     protected abstract void HealthSystem_OnDamaged();
