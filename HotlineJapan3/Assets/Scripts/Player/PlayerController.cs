@@ -6,10 +6,13 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    public event Action OnPlayerDead;
+
     public static PlayerController Instance {  get; private set; }
 
     public bool ControlledByPlayer = true;
     public bool Invulnerable = false;
+    public bool IsDead = false;
 
     [Header("Movement")]
     [SerializeField] private float defautMoveSpeed;
@@ -165,6 +168,7 @@ public class PlayerController : MonoBehaviour
         attackCDDelta = attackCooldown;
         attacking = true;
         animator.Attack();
+        AudioManager.PlaySound(SoundType.SwordSwing);
         StartCoroutine(EnableAttackHitbox());
     }
 
@@ -214,6 +218,9 @@ public class PlayerController : MonoBehaviour
     //Vector2 in Action is the direction where player is looking
     public void TakeDamage(Action<Vector2> OnParried)
     {
+        if(IsDead)
+            return;
+
         if (parrying)
         {
             OnParried?.Invoke(transform.up);
@@ -224,7 +231,10 @@ public class PlayerController : MonoBehaviour
         if (Invulnerable)
             return;
 
+        IsDead = true;
         animator.Die();
+        OnPlayerDead?.Invoke();
+        AudioManager.PlaySound(SoundType.PlayerDeath);
         ControlledByPlayer = false;
     }
 

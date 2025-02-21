@@ -105,6 +105,7 @@ public class MeleeChaseState : IState
 
     private void Attack()
     {
+        AudioManager.PlaySound(SoundType.SwordSwing);
         attackCDDelta = attackCooldown;
         hitboxDurationDelta = hitboxDuration;
         delayDelta = hitboxActivationDelay;

@@ -37,6 +37,7 @@ public class KnockedDownState : IState
     {
         animator.SetKnockedDown(false);
         rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+        rigidbody2D.linearVelocity = Vector3.zero;
     }
 
     public void Tick()

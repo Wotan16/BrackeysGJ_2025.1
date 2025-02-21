@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e082bd64f449f144eadbddd7cd1283e6, type: 3}
+  m_Name: Footsteps_Wood
+  m_EditorClassIdentifier: 
+  soundType: 0
+  sounds:
+  - {fileID: 8300000, guid: 3f555bcd15c8b704dbba5e6ff75f90e1, type: 3}
+  - {fileID: 8300000, guid: 10c238745f0d38946be0158e9cacbc99, type: 3}
+  - {fileID: 8300000, guid: 4125230a16e3f784e8b9e2243f45c449, type: 3}
+  - {fileID: 8300000, guid: 904ed00eff6f6df4a9411f51a7131c3f, type: 3}
+  - {fileID: 8300000, guid: 2bf5a98c726579a42a8e23e878da113d, type: 3}
+  - {fileID: 8300000, guid: 4d4ea9b18d7b9ab40b4f457380826cad, type: 3}
+  volume: 0.2
+  pitch: 1
+  randomPitch: 0
+  maxPitchDistortion: 0.1

@@ -1,5 +1,8 @@
 public enum SoundType
 {
-    BookFire,
-    SwordSlash
+    Footsteps_Wood,
+    SwordClash,
+    SwordSwing,
+    BowShot,
+    PlayerDeath,
 }

@@ -25,6 +25,7 @@ public class MeleeEnemy : EnemyBase
     {
         player.TakeDamage((Vector2 parryDireciton) =>
         {
+            AudioManager.PlaySound(SoundType.SwordClash);
             KnockedDown = true;
         });
     }
