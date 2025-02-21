@@ -11,6 +11,7 @@ public static class SceneLoader
         VictoryScene,
     }
 
+    public static Scene ActiveScene { get { return targetScene; } }
     private static Scene targetScene;
 
     public static void Load(Scene targetScene, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
@@ -18,4 +19,10 @@ public static class SceneLoader
         SceneLoader.targetScene = targetScene;
         SceneManager.LoadScene(targetScene.ToString(), loadSceneMode);
     }
+
+    public static void ReloadCurrentScene()
+    {
+        SceneManager.LoadScene(targetScene.ToString());
+    }
 }
+    

@@ -78,7 +78,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         bool hasLineOfSight = hit.collider.CompareTag("Player");
         return hasLineOfSight;
     }
-
+        
     private void OnDrawGizmos()
     {
         if (Debugger.ShowEnemyGizmos)

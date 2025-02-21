@@ -27,7 +27,7 @@ public class BowAimingState : IState
     public void OnEnter()
     {
         animator.SetAiming(true);
-        isAiming = true;
+        //isAiming = true;
     }
 
     public void OnExit()
