@@ -35,7 +35,7 @@ public class MeleeEnemy : EnemyBase
         EmptyState idle = new EmptyState();
         MeleeChaseState chase = new MeleeChaseState(this, destinationSetter, follower, playerTransform, animator, moveSpeed, attackRange, attackCooldown, swordHitbox);
         KnockedDownState knockedDownState = new KnockedDownState(this, animator, rb2D, stunDuration);
-        DeadState dead = new DeadState(animator, coll);
+        MeleeDeadState dead = new MeleeDeadState(animator, coll);
 
         Func<bool> AgroCondition() => () => CanSeePlayer();
         Func<bool> DeathCondition() => () => IsDead;

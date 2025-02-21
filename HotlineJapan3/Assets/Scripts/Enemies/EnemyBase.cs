@@ -13,6 +13,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected HealthSystem healthSystem;
     protected Transform playerTransform;
     protected StateMachine stateMachine;
+    [SerializeField] protected LayerMask obstacleMask;
 
     public string CurrentState;
     public bool IsDead => healthSystem.IsDead;
@@ -36,6 +37,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         stateMachine.Tick();
         CurrentState = stateMachine.CurrentState.ToString();
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        stateMachine.FixedTick();
     }
 
     protected abstract void HealthSystem_OnDamaged();
@@ -65,7 +71,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         float raycastOffset = 0.4f; //So raycast won't hit enemy collider;
         Vector2 offsetPosition = transform.position + directionToPlayer * raycastOffset;
-        RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer);
+        RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer, visionRange, obstacleMask);
         if(hit.collider == null)
             return false;
 

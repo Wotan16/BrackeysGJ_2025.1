@@ -1,12 +1,12 @@
 using Pathfinding;
 using UnityEngine;
 
-public class DeadState: IState
+public class MeleeDeadState: IState
 {
     private MeleeEnemyAnimator animator;
     private Collider2D collider;
 
-    public DeadState(MeleeEnemyAnimator animator, Collider2D collider)
+    public MeleeDeadState(MeleeEnemyAnimator animator, Collider2D collider)
     {
         this.animator = animator;
         this.collider = collider;

@@ -1,0 +1,57 @@
+using Pathfinding;
+using System;
+using UnityEngine;
+
+public class BowEnemy : EnemyBase
+{
+    private FollowerEntity follower;
+    [SerializeField] private float attackCooldown;
+    [SerializeField] private float timeToAim;
+    [SerializeField] private BowEnemyAnimator animator;
+    [SerializeField] private Collider2D coll;
+    [SerializeField] private Arrow arrowPrefab;
+    [SerializeField] private Rigidbody2D rb2D;
+    private bool canSeePlayer;
+
+    protected override void Start()
+    {
+        follower = GetComponent<FollowerEntity>();
+        base.Start();
+    }
+
+    protected override void HealthSystem_OnDamaged()
+    {
+        return;
+    }
+
+    protected override void HealthSystem_OnDead()
+    {
+        return;
+    }
+
+    protected override void InitializeStateMachine()
+    {
+        EmptyState idle = new EmptyState();
+        BowChaseState chase = new BowChaseState(destinationSetter, follower, playerTransform, animator, moveSpeed);
+        BowAimingState aiming = new BowAimingState(this, animator, timeToAim, attackCooldown, arrowPrefab, rb2D);
+        BowDeadState dead = new BowDeadState(animator, coll);
+
+        Func<bool> AgroCondition() => () => canSeePlayer;
+        Func<bool> DeathCondition() => () => IsDead;
+        Func<bool> StartAimingCondition() => () => canSeePlayer;
+        Func<bool> StopAimingCondition() => () => !canSeePlayer;
+
+        stateMachine.AddTransition(idle, chase, AgroCondition());
+        stateMachine.AddTransition(chase, aiming, StartAimingCondition());
+        stateMachine.AddTransition(aiming, chase, StopAimingCondition());
+        stateMachine.AddAnyTransition(dead, DeathCondition());
+
+        stateMachine.SetState(idle);
+    }
+
+    protected override void Update()
+    {
+        canSeePlayer = CanSeePlayer();
+        base.Update();
+    }
+}

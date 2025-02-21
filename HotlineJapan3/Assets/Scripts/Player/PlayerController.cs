@@ -216,26 +216,27 @@ public class PlayerController : MonoBehaviour
     }
 
     //Vector2 in Action is the direction where player is looking
-    public void TakeDamage(Action<Vector2> OnParried)
+    public bool TakeDamage(Action<Vector2> OnParried)
     {
         if(IsDead)
-            return;
+            return true;
 
         if (parrying)
         {
             OnParried?.Invoke(transform.up);
             Debug.Log("Parried");
-            return;
+            return false;
         }
 
         if (Invulnerable)
-            return;
+            return true;
 
         IsDead = true;
         animator.Die();
         OnPlayerDead?.Invoke();
         AudioManager.PlaySound(SoundType.PlayerDeath);
         ControlledByPlayer = false;
+        return true;
     }
 
     #region InputEvents
