@@ -8,6 +8,7 @@ public class MeleeEnemyAnimator : MonoBehaviour
     [SerializeField] private Animator animator;
     private const string ATTACK_TRIGGER = "Attack";
     private const string MOVING_BOOL = "Moving";
+    private const string KNOCKED_DOWN_BOOL = "KnockedDown";
     private const string DEATH_TRIGGER = "Death";
 
     public void Attack()
@@ -18,6 +19,11 @@ public class MeleeEnemyAnimator : MonoBehaviour
     public void Die()
     {
         animator.SetTrigger(DEATH_TRIGGER);
+    }
+
+    public void SetKnockedDown(bool knockedDown)
+    {
+        animator.SetBool(KNOCKED_DOWN_BOOL, knockedDown);
     }
 
     public void SetMoving(bool moving)

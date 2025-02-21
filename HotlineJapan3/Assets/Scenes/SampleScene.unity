@@ -1351,7 +1351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControlledByPlayer: 1
-  Invulnerable: 0
+  Invulnerable: 1
   defautMoveSpeed: 5
   parryingMoveSpeed: 3
   dashDistance: 3
@@ -1642,6 +1642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showEnemyGizmos: 0
+  timeScale: 1
 --- !u!1 &1113138736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1656,6 +1657,7 @@ GameObject:
   - component: {fileID: 1113138737}
   - component: {fileID: 1113138740}
   - component: {fileID: 1113138741}
+  - component: {fileID: 1113138743}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -1818,13 +1820,44 @@ MonoBehaviour:
   moveSpeed: 5
   visionAngle: 69.8
   visionRange: 3.41
-  attackRange: 0.6
+  attackRange: 0.75
   destinationSetter: {fileID: 1113138737}
   healthSystem: {fileID: 1113138741}
   CurrentState: 
   animator: {fileID: 603776892}
   attackCooldown: 0.5
   coll: {fileID: 1113138740}
+  swordHitbox: {fileID: 1677481305}
+  stunDuration: 1
+  rb2D: {fileID: 1113138743}
+  KnockedDown: 0
+--- !u!50 &1113138743
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113138736}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 5
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &1216462288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2094,7 +2127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1677481302}
   - component: {fileID: 1677481304}
-  - component: {fileID: 1677481303}
+  - component: {fileID: 1677481305}
   m_Layer: 0
   m_Name: SwordHitbox
   m_TagString: Untagged
@@ -2118,19 +2151,6 @@ Transform:
   - {fileID: 439419887}
   m_Father: {fileID: 1113138739}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1677481303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1677481301}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc1fc8a6da261274497f1a6762e5a1ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageColliderObject: {fileID: 439419886}
 --- !u!50 &1677481304
 Rigidbody2D:
   serializedVersion: 5
@@ -2158,6 +2178,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &1677481305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677481301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd36d66be431acd4680da70d4ed3721f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageColliderObject: {fileID: 439419886}
 --- !u!4 &1829753029 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4289226666672338161, guid: 1221c74ee596dfa4d88ed567466f1b9a, type: 3}

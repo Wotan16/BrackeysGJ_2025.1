@@ -9,6 +9,7 @@ public class MeleeChaseState : IState
     private FollowerEntity follower;
     private Transform playerTransform;
     private MeleeEnemyAnimator animator;
+    private EnemySwordHitbox swordHitbox;
     private float moveSpeed;
     private float attackRange;
     private float attackCooldown;
@@ -16,8 +17,15 @@ public class MeleeChaseState : IState
     private float attackCDDelta;
     private bool canAttack => attackCDDelta <= 0;
 
+    private bool preparingToAttack;
+    public float hitboxActivationDelay = 0.15f;
+    private float delayDelta;
+    private float hitboxDuration = 0.1f;
+    private float hitboxDurationDelta;
+
+    
     public MeleeChaseState(MeleeEnemy enemy, AIDestinationSetter destinationSetter, FollowerEntity follower, Transform playerTransform,
-        MeleeEnemyAnimator animator, float moveSpeed, float attackRange, float attackCooldown)
+        MeleeEnemyAnimator animator, float moveSpeed, float attackRange, float attackCooldown, EnemySwordHitbox swordHitbox)
     {
         this.enemy = enemy;
         this.destinationSetter = destinationSetter;
@@ -27,6 +35,7 @@ public class MeleeChaseState : IState
         this.moveSpeed = moveSpeed;
         this.attackRange = attackRange;
         this.attackCooldown = attackCooldown;
+        this.swordHitbox = swordHitbox;
     }
 
     public void FixedTick()
@@ -46,21 +55,61 @@ public class MeleeChaseState : IState
     {
         destinationSetter.target = null;
         follower.enabled = false;
+        preparingToAttack = false;
+        swordHitbox.DisableHitbox();
         animator.SetMoving(false);
     }
 
     public void Tick()
     {
         HandleAttackCooldown();
+        HandleHitboxActivation();
+        HandleHitboxActive();
+
 
         if (!canAttack)
             return;
 
         if (InAttackRange())
         {
-            attackCDDelta = attackCooldown;
-            animator.Attack();
+            Attack();
         }
+    }
+
+    private void HandleHitboxActivation()
+    {
+        if (!preparingToAttack)
+            return;
+
+        if (delayDelta <= 0)
+        {
+            swordHitbox.EnableHitbox();
+            preparingToAttack = false;
+            return;
+        }
+        delayDelta -= Time.deltaTime;
+    }
+
+    private void HandleHitboxActive()
+    {
+        if (preparingToAttack)
+            return;
+
+        if(hitboxDurationDelta <= 0)
+        {
+            swordHitbox.DisableHitbox();
+            return;
+        }
+        hitboxDurationDelta -= Time.deltaTime;
+    }
+
+    private void Attack()
+    {
+        attackCDDelta = attackCooldown;
+        hitboxDurationDelta = hitboxDuration;
+        delayDelta = hitboxActivationDelay;
+        preparingToAttack = true;
+        animator.Attack();
     }
 
     private void HandleAttackCooldown()
