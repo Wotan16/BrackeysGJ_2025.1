@@ -42,9 +42,7 @@ public class BowAimingState : IState
             if(timeToAimDelta <= 0)
             {
                 attackCDDelta = attackCooldown;
-                Vector2 directionToPlayer = PlayerController.Instance.transform.position - enemy.transform.position;
-                Arrow arrow = GameObject.Instantiate(arrowPrefab, enemy.transform.position, enemy.transform.rotation);
-                arrow.SetArrow(directionToPlayer, true);
+                ShootArrow();
                 isAiming = false;
             }
             timeToAimDelta -= Time.deltaTime;
@@ -57,6 +55,14 @@ public class BowAimingState : IState
             isAiming = true;
         }
         attackCDDelta -= Time.deltaTime;
+    }
+
+    private void ShootArrow()
+    {
+        Vector2 directionToPlayer = PlayerController.Instance.transform.position - enemy.transform.position;
+        Arrow arrow = GameObject.Instantiate(arrowPrefab, enemy.transform.position, enemy.transform.rotation);
+        arrow.SetArrow(directionToPlayer, true);
+        AudioManager.PlaySound(SoundType.BowShot);
     }
 
     private void RotateTowardsPlayer()

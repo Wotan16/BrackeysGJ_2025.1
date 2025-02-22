@@ -5,4 +5,6 @@ public enum SoundType
     SwordSwing,
     BowShot,
     PlayerDeath,
+    ArrowParry,
+    EnemyDeath
 }

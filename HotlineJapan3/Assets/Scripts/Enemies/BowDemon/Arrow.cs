@@ -28,6 +28,7 @@ public class Arrow : MonoBehaviour
                 PlayerController player = PlayerController.Instance;
                 player.TakeDamage((Vector2 parryDirection) =>
                 {
+                    AudioManager.PlaySound(SoundType.ArrowParry);
                     Arrow arrow = Instantiate(arrowPrefab, player.transform.position, player.transform.rotation);
                     arrow.SetArrow(parryDirection, false);
                 });

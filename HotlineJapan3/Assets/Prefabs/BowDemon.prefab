@@ -61,6 +61,8 @@ MonoBehaviour:
     m_Bits: 320
   CurrentState: 
   alerted: 0
+  alertRange: 3
+  agroRange: 0.75
   attackCooldown: 1
   timeToAim: 0.3
   animator: {fileID: 6153761105017962302}

@@ -37,7 +37,7 @@ public class MeleeEnemy : EnemyBase
         KnockedDownState knockedDownState = new KnockedDownState(this, animator, rb2D, stunDuration);
         MeleeDeadState dead = new MeleeDeadState(animator, coll);
 
-        Func<bool> AgroCondition() => () => CanSeePlayer() || alerted;
+        Func<bool> AgroCondition() => () => CanSeePlayer() || alerted || PlayerTooClose();
         Func<bool> DeathCondition() => () => IsDead;
         Func<bool> KnockedDownCondition() => () => KnockedDown;
         Func<bool> GetUpCondition() => () => !KnockedDown;

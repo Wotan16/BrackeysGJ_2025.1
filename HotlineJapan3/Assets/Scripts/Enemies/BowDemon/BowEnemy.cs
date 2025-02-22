@@ -26,7 +26,7 @@ public class BowEnemy : EnemyBase
         BowAimingState aiming = new BowAimingState(this, animator, timeToAim, attackCooldown, arrowPrefab, rb2D);
         BowDeadState dead = new BowDeadState(animator, coll);
 
-        Func<bool> AgroCondition() => () => canSeePlayer || alerted;
+        Func<bool> AgroCondition() => () => canSeePlayer || alerted || PlayerTooClose();
         Func<bool> DeathCondition() => () => IsDead;
         Func<bool> StartAimingCondition() => () => canSeePlayer;
         Func<bool> StopAimingCondition() => () => !canSeePlayer;

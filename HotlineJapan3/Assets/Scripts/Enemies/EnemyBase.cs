@@ -1,9 +1,13 @@
 using Pathfinding;
 using System;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
+    public static event Action<EnemyBase> OnAnyEnemySpawned;
+    public static event Action<EnemyBase> OnAnyEnemyDead;
+
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float visionAngle;
     [SerializeField] protected float visionRange;
@@ -19,6 +23,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public bool IsDead => healthSystem.IsDead;
     public bool alerted = false;
     public float alertRange;
+    [SerializeField] private float agroRange;
 
     protected virtual void Awake()
     {
@@ -33,6 +38,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         healthSystem.OnDead += HealthSystem_OnDead;
 
         InitializeStateMachine();
+
+        OnAnyEnemySpawned?.Invoke(this);
     }
 
     protected virtual void Update()
@@ -53,6 +60,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         
     protected virtual void HealthSystem_OnDead()
     {
+        OnAnyEnemyDead?.Invoke(this);
         AlertEnemiesAround(alertRange);
     }
 
@@ -99,6 +107,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         bool hasLineOfSight = hit.collider.CompareTag("Player");
         return hasLineOfSight;
+    }
+
+    public bool PlayerTooClose()
+    {
+        return Vector2.Distance(transform.position, playerTransform.position) <= agroRange;
     }
         
     private void OnDrawGizmos()

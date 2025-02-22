@@ -8,6 +8,7 @@ public class FootstepsAudio : MonoBehaviour
 
     private void Awake()
     {
+        previousPosition = transform.position;
         stepDelta = stepDistance;
     }
 
