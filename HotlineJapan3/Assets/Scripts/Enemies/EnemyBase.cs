@@ -1,9 +1,13 @@
 using Pathfinding;
 using System;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
+    public static event Action<EnemyBase> OnAnyEnemySpawned;
+    public static event Action<EnemyBase> OnAnyEnemyDead;
+
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float visionAngle;
     [SerializeField] protected float visionRange;
@@ -13,8 +17,13 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected HealthSystem healthSystem;
     protected Transform playerTransform;
     protected StateMachine stateMachine;
+    [SerializeField] protected LayerMask obstacleMask;
 
-    private string currentState;
+    public string CurrentState;
+    public bool IsDead => healthSystem.IsDead;
+    public bool alerted = false;
+    public float alertRange;
+    [SerializeField] private float agroRange;
 
     protected virtual void Awake()
     {
@@ -29,17 +38,45 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         healthSystem.OnDead += HealthSystem_OnDead;
 
         InitializeStateMachine();
+
+        OnAnyEnemySpawned?.Invoke(this);
     }
 
     protected virtual void Update()
     {
-        //stateMachine.Tick();
-        //currentState = stateMachine.CurrentState.ToString();
+        stateMachine.Tick();
+        CurrentState = stateMachine.CurrentState.ToString();
     }
 
-    protected abstract void HealthSystem_OnDamaged();
+    protected virtual void FixedUpdate()
+    {
+        stateMachine.FixedTick();
+    }
+
+    protected virtual void HealthSystem_OnDamaged()
+    {
+        AlertEnemiesAround(alertRange);
+    }
         
-    protected abstract void HealthSystem_OnDead();
+    protected virtual void HealthSystem_OnDead()
+    {
+        OnAnyEnemyDead?.Invoke(this);
+        AlertEnemiesAround(alertRange);
+    }
+
+    public void AlertEnemiesAround(float radius)
+    {
+        LayerMask charactersMask = (1 << CustomLayerManager.charactersLayer);
+        
+        Collider2D[] charactersAround = Physics2D.OverlapCircleAll(transform.position, radius, charactersMask);
+        foreach (Collider2D characterCollider in charactersAround)
+        {
+            if (!characterCollider.TryGetComponent(out EnemyBase enemy))
+                continue;
+
+            enemy.alerted = true;
+        }
+    }
 
     protected abstract void InitializeStateMachine();
 
@@ -48,7 +85,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         healthSystem.TakeDamage(damage);
     }
 
-    protected virtual bool CanSeePlayer()
+    public virtual bool CanSeePlayer()
     {
         if (playerTransform == null)
             return false;
@@ -57,17 +94,26 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (!inVisionRange)
             return false;
 
-        Vector2 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        if(Vector2.Angle(transform.up, directionToPlayer) > visionAngle)
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        float angleToPlayer = Vector2.Angle(transform.up, directionToPlayer);
+        if (angleToPlayer > visionAngle / 2)
             return false;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerTransform.position);
+        float raycastOffset = 0.4f; //So raycast won't hit enemy collider;
+        Vector2 offsetPosition = transform.position + directionToPlayer * raycastOffset;
+        RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer, visionRange, obstacleMask);
         if(hit.collider == null)
             return false;
 
-        return hit.collider.CompareTag("Player");
+        bool hasLineOfSight = hit.collider.CompareTag("Player");
+        return hasLineOfSight;
     }
 
+    public bool PlayerTooClose()
+    {
+        return Vector2.Distance(transform.position, playerTransform.position) <= agroRange;
+    }
+        
     private void OnDrawGizmos()
     {
         if (Debugger.ShowEnemyGizmos)
@@ -89,7 +135,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         bool canSeePlayer = CanSeePlayer();
         Vector2 lookDirection = transform.up;
         float halfAngle = visionAngle / 2;
-        Gizmos.color = canSeePlayer ? Color.magenta : Color.cyan;
+        Gizmos.color = canSeePlayer ? Color.red : Color.blue;
 
         Quaternion leftRotation = Quaternion.AngleAxis(halfAngle, Vector3.back);
         Vector3 leftDirection = leftRotation * lookDirection;
@@ -99,7 +145,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         Vector3 rightDirection = rightRotation * lookDirection;
         Gizmos.DrawLine(transform.position, transform.position + rightDirection * visionRange);
 
-        Gizmos.color = canSeePlayer ? Color.red : Color.blue;
-        Gizmos.DrawWireSphere(transform.position, visionRange);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, alertRange);
     }
 }
