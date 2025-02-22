@@ -18,6 +18,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public string CurrentState;
     public bool IsDead => healthSystem.IsDead;
     public bool alerted = false;
+    public float alertRange;
 
     protected virtual void Awake()
     {
@@ -47,12 +48,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void HealthSystem_OnDamaged()
     {
-        AlertEnemiesAround(8f);
+        AlertEnemiesAround(alertRange);
     }
         
     protected virtual void HealthSystem_OnDead()
     {
-        AlertEnemiesAround(4f);
+        AlertEnemiesAround(alertRange);
     }
 
     public void AlertEnemiesAround(float radius)
@@ -121,7 +122,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         bool canSeePlayer = CanSeePlayer();
         Vector2 lookDirection = transform.up;
         float halfAngle = visionAngle / 2;
-        Gizmos.color = canSeePlayer ? Color.magenta : Color.cyan;
+        Gizmos.color = canSeePlayer ? Color.red : Color.blue;
 
         Quaternion leftRotation = Quaternion.AngleAxis(halfAngle, Vector3.back);
         Vector3 leftDirection = leftRotation * lookDirection;
@@ -131,7 +132,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         Vector3 rightDirection = rightRotation * lookDirection;
         Gizmos.DrawLine(transform.position, transform.position + rightDirection * visionRange);
 
-        Gizmos.color = canSeePlayer ? Color.red : Color.blue;
-        //Gizmos.DrawWireSphere(transform.position, visionRange);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, alertRange);
     }
 }

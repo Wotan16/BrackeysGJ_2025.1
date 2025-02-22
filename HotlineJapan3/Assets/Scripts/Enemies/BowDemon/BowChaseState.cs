@@ -27,7 +27,7 @@ public class BowChaseState : IState
 
     public void OnEnter()
     {
-        enemy.AlertEnemiesAround(6f);
+        enemy.AlertEnemiesAround(enemy.alertRange);
         follower.enabled = true;
         follower.maxSpeed = moveSpeed;
         destinationSetter.target = playerTransform;
