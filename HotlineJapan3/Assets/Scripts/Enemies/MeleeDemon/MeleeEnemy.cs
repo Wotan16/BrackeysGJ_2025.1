@@ -37,7 +37,7 @@ public class MeleeEnemy : EnemyBase
         KnockedDownState knockedDownState = new KnockedDownState(this, animator, rb2D, stunDuration);
         MeleeDeadState dead = new MeleeDeadState(animator, coll);
 
-        Func<bool> AgroCondition() => () => CanSeePlayer();
+        Func<bool> AgroCondition() => () => CanSeePlayer() || alerted;
         Func<bool> DeathCondition() => () => IsDead;
         Func<bool> KnockedDownCondition() => () => KnockedDown;
         Func<bool> GetUpCondition() => () => !KnockedDown;
@@ -48,15 +48,5 @@ public class MeleeEnemy : EnemyBase
         stateMachine.AddAnyTransition(knockedDownState, KnockedDownCondition());
 
         stateMachine.SetState(idle);
-    }
-
-    protected override void HealthSystem_OnDamaged()
-    {
-        Debug.Log("Damaged");
-    }
-
-    protected override void HealthSystem_OnDead()
-    {
-        Debug.Log("Dead");
     }
 }

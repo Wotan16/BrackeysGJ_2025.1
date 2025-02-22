@@ -45,6 +45,7 @@ public class MeleeChaseState : IState
 
     public void OnEnter()
     {
+        enemy.AlertEnemiesAround(6f);
         follower.enabled = true;
         follower.maxSpeed = moveSpeed;
         destinationSetter.target = playerTransform;

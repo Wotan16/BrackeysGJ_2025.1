@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class BowChaseState : IState
 {
+    private BowEnemy enemy;
     private AIDestinationSetter destinationSetter;
     private FollowerEntity follower;
     private Transform playerTransform;
     private BowEnemyAnimator animator;
     private float moveSpeed;
 
-    public BowChaseState(AIDestinationSetter destinationSetter, FollowerEntity follower, Transform playerTransform, BowEnemyAnimator animator, float moveSpeed)
+    public BowChaseState(BowEnemy enemy, AIDestinationSetter destinationSetter, FollowerEntity follower, Transform playerTransform, BowEnemyAnimator animator, float moveSpeed)
     {
+        this.enemy = enemy;
         this.destinationSetter = destinationSetter;
         this.follower = follower;
         this.playerTransform = playerTransform;
@@ -25,6 +27,7 @@ public class BowChaseState : IState
 
     public void OnEnter()
     {
+        enemy.AlertEnemiesAround(6f);
         follower.enabled = true;
         follower.maxSpeed = moveSpeed;
         destinationSetter.target = playerTransform;

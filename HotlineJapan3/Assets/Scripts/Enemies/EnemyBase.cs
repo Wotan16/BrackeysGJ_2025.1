@@ -17,6 +17,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public string CurrentState;
     public bool IsDead => healthSystem.IsDead;
+    public bool alerted = false;
 
     protected virtual void Awake()
     {
@@ -44,9 +45,29 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         stateMachine.FixedTick();
     }
 
-    protected abstract void HealthSystem_OnDamaged();
+    protected virtual void HealthSystem_OnDamaged()
+    {
+        AlertEnemiesAround(8f);
+    }
         
-    protected abstract void HealthSystem_OnDead();
+    protected virtual void HealthSystem_OnDead()
+    {
+        AlertEnemiesAround(4f);
+    }
+
+    public void AlertEnemiesAround(float radius)
+    {
+        LayerMask charactersMask = (1 << CustomLayerManager.charactersLayer);
+        
+        Collider2D[] charactersAround = Physics2D.OverlapCircleAll(transform.position, radius, charactersMask);
+        foreach (Collider2D characterCollider in charactersAround)
+        {
+            if (!characterCollider.TryGetComponent(out EnemyBase enemy))
+                continue;
+
+            enemy.alerted = true;
+        }
+    }
 
     protected abstract void InitializeStateMachine();
 

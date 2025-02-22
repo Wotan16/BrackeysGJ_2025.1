@@ -19,24 +19,14 @@ public class BowEnemy : EnemyBase
         base.Start();
     }
 
-    protected override void HealthSystem_OnDamaged()
-    {
-        return;
-    }
-
-    protected override void HealthSystem_OnDead()
-    {
-        return;
-    }
-
     protected override void InitializeStateMachine()
     {
         EmptyState idle = new EmptyState();
-        BowChaseState chase = new BowChaseState(destinationSetter, follower, playerTransform, animator, moveSpeed);
+        BowChaseState chase = new BowChaseState(this, destinationSetter, follower, playerTransform, animator, moveSpeed);
         BowAimingState aiming = new BowAimingState(this, animator, timeToAim, attackCooldown, arrowPrefab, rb2D);
         BowDeadState dead = new BowDeadState(animator, coll);
 
-        Func<bool> AgroCondition() => () => canSeePlayer;
+        Func<bool> AgroCondition() => () => canSeePlayer || alerted;
         Func<bool> DeathCondition() => () => IsDead;
         Func<bool> StartAimingCondition() => () => canSeePlayer;
         Func<bool> StopAimingCondition() => () => !canSeePlayer;
