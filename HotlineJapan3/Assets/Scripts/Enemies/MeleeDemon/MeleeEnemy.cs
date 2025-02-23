@@ -1,5 +1,9 @@
+using NUnit.Framework;
 using Pathfinding;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class MeleeEnemy : EnemyBase
@@ -12,6 +16,7 @@ public class MeleeEnemy : EnemyBase
     [SerializeField] private float stunDuration;
     [SerializeField] private Rigidbody2D rb2D;
     public bool KnockedDown = false;
+    [SerializeField] private List<Transform> patrolPoints;
 
     protected override void Start()
     {
@@ -33,6 +38,7 @@ public class MeleeEnemy : EnemyBase
     protected override void InitializeStateMachine()
     {
         EmptyState idle = new EmptyState();
+        MeleePatrolState patrol = new MeleePatrolState(this, destinationSetter, follower, animator, patrolPoints, moveSpeed);
         MeleeChaseState chase = new MeleeChaseState(this, destinationSetter, follower, playerTransform, animator, moveSpeed, attackRange, attackCooldown, swordHitbox);
         KnockedDownState knockedDownState = new KnockedDownState(this, animator, rb2D, stunDuration);
         MeleeDeadState dead = new MeleeDeadState(animator, coll);
@@ -43,10 +49,30 @@ public class MeleeEnemy : EnemyBase
         Func<bool> GetUpCondition() => () => !KnockedDown;
 
         stateMachine.AddTransition(idle, chase, AgroCondition());
+        stateMachine.AddTransition(patrol, chase, AgroCondition());
         stateMachine.AddTransition(knockedDownState, chase, GetUpCondition());
         stateMachine.AddAnyTransition(dead, DeathCondition());
         stateMachine.AddAnyTransition(knockedDownState, KnockedDownCondition());
 
-        stateMachine.SetState(idle);
+        if (patrolPoints.Count > 1)
+            stateMachine.SetState(patrol);
+        else
+            stateMachine.SetState(idle);
+    }
+
+    protected override void DrawGizmos()
+    {
+        base.DrawGizmos();
+
+        if (patrolPoints.Count > 1)
+        {
+            Gizmos.color = Color.red;
+            for (int i = 0; i < patrolPoints.Count - 1; i++)
+            {
+                Gizmos.DrawLine(patrolPoints[i].position, patrolPoints[i + 1].position);
+            }
+
+            Gizmos.DrawLine(patrolPoints.Last().position, patrolPoints.First().position);
+        }
     }
 }

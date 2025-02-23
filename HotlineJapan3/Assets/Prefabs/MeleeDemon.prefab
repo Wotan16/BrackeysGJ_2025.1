@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   visionAngle: 69.8
-  visionRange: 3.41
+  visionRange: 15
   attackRange: 0.75
   destinationSetter: {fileID: 4398935941280371340}
   healthSystem: {fileID: 7704263790823036858}
