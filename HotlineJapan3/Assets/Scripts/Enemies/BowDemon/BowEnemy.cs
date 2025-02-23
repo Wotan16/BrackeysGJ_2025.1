@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using Pathfinding;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BowEnemy : EnemyBase
@@ -12,6 +14,8 @@ public class BowEnemy : EnemyBase
     [SerializeField] private Arrow arrowPrefab;
     [SerializeField] private Rigidbody2D rb2D;
     private bool canSeePlayer;
+
+    [SerializeField] private List<Transform> partolPoints;
 
     protected override void Start()
     {
