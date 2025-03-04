@@ -7,8 +7,11 @@ public static class SceneLoader
     public enum Scene
     {
         MainMenuScene,
-        ActualLevel,
-        VictoryScene,
+        FloorOne,
+        FloorTwo,
+        FloorThree,
+        FinalFloor,
+        VictoryScene
     }
 
     public static Scene ActiveScene { get { return targetScene; } }

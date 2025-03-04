@@ -422,6 +422,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1931273745204812540, guid: 0ec995d4345736d43aa786ee00edb413, type: 3}
+      propertyPath: m_text
+      value: "Controls:\nWASD - To Move Around\r\nMouse Movement - To Aim \r\nLeft
+        Mouse - Swing\r\nRight Mouse - Parry\r\nSpace bar - Dash"
+      objectReference: {fileID: 0}
     - target: {fileID: 2512887154793135866, guid: 0ec995d4345736d43aa786ee00edb413, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

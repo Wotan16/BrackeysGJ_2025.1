@@ -8,7 +8,7 @@ public class Reloader : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneLoader.Load(scene);
+            SceneLoader.Load(SceneLoader.ActiveScene);
         }
     }
 }

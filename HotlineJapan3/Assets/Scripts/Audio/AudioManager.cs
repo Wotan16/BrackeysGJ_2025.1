@@ -100,6 +100,7 @@ public class AudioManager : MonoBehaviour
     public static void PlayMusic(MusicType type)
     {
         GameObject sourceGO = new GameObject("Music Source");
+        sourceGO.transform.SetParent(Instance.transform);
         AudioSource musicSource = sourceGO.AddComponent<AudioSource>();
         musicSource.resource = Instance.musicList.GetMusicClip(type);
         musicSource.outputAudioMixerGroup = GetMixerGroupByType(MixerGroupType.Music);

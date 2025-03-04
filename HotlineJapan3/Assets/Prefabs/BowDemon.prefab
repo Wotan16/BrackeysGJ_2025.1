@@ -69,6 +69,7 @@ MonoBehaviour:
   coll: {fileID: 7939884709902545596}
   arrowPrefab: {fileID: 3904187207387800412, guid: 1c1257604d1d52545bf7d7e1007b3165, type: 3}
   rb2D: {fileID: 520771213454273249}
+  partolPoints: []
 --- !u!114 &4564908469778057915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,7 +321,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1000
   m_Sprite: {fileID: -196992578064679800, guid: ac437cdbcc693384587ee82081dc3144, type: 3}
-  m_Color: {r: 0.44459772, g: 0.9150943, b: 0.8890778, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
