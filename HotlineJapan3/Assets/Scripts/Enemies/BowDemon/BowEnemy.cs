@@ -7,8 +7,12 @@ using UnityEngine;
 public class BowEnemy : EnemyBase
 {
     private FollowerEntity follower;
+
+    [Header("Bow enemy params")]
     [SerializeField] private float attackCooldown;
     [SerializeField] private float timeToAim;
+
+    [Header("Bow enemy references")]
     [SerializeField] private BowEnemyAnimator animator;
     [SerializeField] private Arrow arrowPrefab;
     [SerializeField] private Rigidbody2D rb2D;

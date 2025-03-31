@@ -1,6 +1,8 @@
 using Pathfinding;
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
@@ -142,36 +144,84 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         
     private void OnDrawGizmos()
     {
-        if (Debugger.ShowEnemyGizmos)
-        {
-            DrawGizmos();
-        }
+        DrawGizmos();
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (!Debugger.ShowEnemyGizmos)
-        {
-            DrawGizmos();
-        }
+        DrawAlertRange();
+        DrawVisionCone();
     }
 
     protected virtual void DrawGizmos()
+    {
+        if (Debugger.ShowEnemyVision)
+        {
+            DrawVisionCone();
+        }
+
+        if (Debugger.ShowEnemyAgroRange)
+        {
+            DrawAlertRange();
+        }
+    }
+
+    private void DrawAlertRange()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, alertRange);
+    }
+
+    private void DrawVisionCone()
     {
         bool canSeePlayer = CanSeePlayer();
         Vector2 lookDirection = transform.up;
         float halfAngle = visionAngle / 2;
         Gizmos.color = canSeePlayer ? Color.red : Color.blue;
+        int numberOfEdges = 48;
 
         Quaternion leftRotation = Quaternion.AngleAxis(halfAngle, Vector3.back);
         Vector3 leftDirection = leftRotation * lookDirection;
-        Gizmos.DrawLine(transform.position, transform.position + leftDirection * visionRange);
+        RaycastHit2D[] leftHits = Physics2D.RaycastAll(transform.position, leftDirection, visionRange, obstacleMask);
+        Vector2 lastVertexPos = GetClosestHitPosition(leftHits, leftDirection);
+        Gizmos.DrawLine(transform.position, lastVertexPos);
 
-        Quaternion rightRotation = Quaternion.AngleAxis(-halfAngle, Vector3.back);
-        Vector3 rightDirection = rightRotation * lookDirection;
-        Gizmos.DrawLine(transform.position, transform.position + rightDirection * visionRange);
+        for (int i = 1; i <= numberOfEdges; i++)
+        {
+            float raycastAngle = -visionAngle * (i / (float)numberOfEdges);
+            Quaternion addedRotation = Quaternion.AngleAxis(raycastAngle, Vector3.back);
+            Vector3 direction = addedRotation * leftDirection;
+            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, visionRange, obstacleMask);
+            Vector2 nextVertexPos = GetClosestHitPosition(hits, direction);
+            Gizmos.DrawLine(lastVertexPos, nextVertexPos);
+            lastVertexPos = nextVertexPos;
+        }
 
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, alertRange);
+        Gizmos.DrawLine(transform.position, lastVertexPos);
+    }
+
+    private Vector3 GetClosestHitPosition(RaycastHit2D[] hits, Vector3 direction)
+    {
+        float maxDistance = visionRange;
+        RaycastHit2D closestHit = new RaycastHit2D();
+        foreach (var hit in hits)
+        {
+            if(hit.collider == null)
+                continue;
+            if(hit.collider == coll)
+                continue;
+            if(hit.distance < maxDistance)
+            {
+                maxDistance = hit.distance;
+                closestHit = hit;
+            }
+        }
+
+        if(closestHit.collider == null)
+        {
+            return transform.position + direction * visionRange;
+        }
+
+        return closestHit.point;
     }
 }

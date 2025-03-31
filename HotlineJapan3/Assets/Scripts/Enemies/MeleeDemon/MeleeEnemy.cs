@@ -7,12 +7,16 @@ using UnityEngine;
 public class MeleeEnemy : EnemyBase
 {
     private FollowerEntity follower;
-    [SerializeField] private MeleeEnemyAnimator animator;
+
+    [Header("Sword enemy params")]
     [SerializeField] private float attackCooldown;
-    [SerializeField] private EnemySwordHitbox swordHitbox;
     [SerializeField] private float stunDuration;
-    [SerializeField] private Rigidbody2D rb2D;
     public bool KnockedDown = false;
+
+    [Header("Sword enemy references")]
+    [SerializeField] private MeleeEnemyAnimator animator;
+    [SerializeField] private EnemySwordHitbox swordHitbox;
+    [SerializeField] private Rigidbody2D rb2D;
     [SerializeField] private List<Transform> patrolPoints;
 
     protected override void Start()
