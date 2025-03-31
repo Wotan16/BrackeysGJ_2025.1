@@ -99,14 +99,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (angleToPlayer > visionAngle / 2)
             return false;
 
-        //float raycastOffset = 0.4f; //So raycast won't hit enemy collider;
-        //Vector2 offsetPosition = transform.position + directionToPlayer * raycastOffset;
-        //RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer, visionRange, obstacleMask);
-        //if(hit.collider == null)
-        //    return false;
-
-        //bool hasLineOfSight = hit.collider.CompareTag("Player");
-        //return hasLineOfSight;
         return RaycastHitPlayer();
     }
 
@@ -124,17 +116,20 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             }
         }
 
+        if(playerHit.collider == null)
+            return false;
+
         float distanceToPlayer = Vector2.Distance(transform.position, playerHit.point);
 
         foreach (RaycastHit2D hit in hits)
         {
-            if (hit == playerHit)
+            if (hit.collider == playerHit.collider)
                 continue;
 
             if (hit.collider == coll)
                 continue;
 
-            if (Vector2.Distance(transform.position, hit.point) < distanceToPlayer)
+            if (hit.distance < distanceToPlayer)
                 return false;
         }
         return true;
