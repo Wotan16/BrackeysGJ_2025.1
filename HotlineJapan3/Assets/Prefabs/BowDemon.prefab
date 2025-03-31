@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 412960548363746588}
   - component: {fileID: 4339942363392978264}
+  - component: {fileID: 3617043719812659215}
   - component: {fileID: 4564908469778057915}
   - component: {fileID: 6128723707626566057}
   - component: {fileID: 7939884709902545596}
-  - component: {fileID: 3617043719812659215}
   - component: {fileID: 520771213454273249}
   m_Layer: 8
   m_Name: BowDemon
@@ -50,26 +50,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9795f78e210d6745b5e758823d2903f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 10
   visionAngle: 80
   visionRange: 15
   attackRange: 5
   destinationSetter: {fileID: 6128723707626566057}
   healthSystem: {fileID: 3617043719812659215}
+  coll: {fileID: 7939884709902545596}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 320
   CurrentState: 
   alerted: 0
-  alertRange: 3
-  agroRange: 0.75
+  alertRange: 6
+  agroRange: 1.5
   attackCooldown: 1
   timeToAim: 0.3
   animator: {fileID: 6153761105017962302}
-  coll: {fileID: 7939884709902545596}
   arrowPrefab: {fileID: 3904187207387800412, guid: 1c1257604d1d52545bf7d7e1007b3165, type: 3}
   rb2D: {fileID: 520771213454273249}
   partolPoints: []
+--- !u!114 &3617043719812659215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3299694285868628130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc5a729ce85b24499ad1ae6f016a982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 1
 --- !u!114 &4564908469778057915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1073741831
   shape:
-    radius: 0.5
+    radius: 0.6
     height: 2
   movement:
     follower:
@@ -179,20 +192,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.3
---- !u!114 &3617043719812659215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3299694285868628130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcc5a729ce85b24499ad1ae6f016a982, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 1
+  m_Radius: 0.6
 --- !u!50 &520771213454273249
 Rigidbody2D:
   serializedVersion: 5
@@ -320,7 +320,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1000
-  m_Sprite: {fileID: -196992578064679800, guid: ac437cdbcc693384587ee82081dc3144, type: 3}
+  m_Sprite: {fileID: 2434711699474832698, guid: d3297afcaa7963a48be6288ecd127560, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

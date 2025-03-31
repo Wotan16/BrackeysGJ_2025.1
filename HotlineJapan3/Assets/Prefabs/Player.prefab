@@ -73,7 +73,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.25
+  m_Radius: 0.6
 --- !u!50 &7626814504446217826
 Rigidbody2D:
   serializedVersion: 5
@@ -270,9 +270,9 @@ MonoBehaviour:
   ControlledByPlayer: 1
   Invulnerable: 0
   IsDead: 0
-  defautMoveSpeed: 5
-  parryingMoveSpeed: 3
-  dashDistance: 3
+  defautMoveSpeed: 10
+  parryingMoveSpeed: 6
+  dashDistance: 4
   dashSpeed: 25
   dashCooldown: 2
   attackCooldown: 0.4
@@ -321,7 +321,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.9, y: 1.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7565568725128319380}

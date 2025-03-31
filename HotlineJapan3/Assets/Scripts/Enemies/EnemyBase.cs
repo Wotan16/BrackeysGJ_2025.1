@@ -16,6 +16,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] protected HealthSystem healthSystem;
     protected Transform playerTransform;
     protected StateMachine stateMachine;
+    [SerializeField] protected Collider2D coll;
     [SerializeField] protected LayerMask obstacleMask;
 
     public string CurrentState;
@@ -98,14 +99,45 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         if (angleToPlayer > visionAngle / 2)
             return false;
 
-        float raycastOffset = 0.4f; //So raycast won't hit enemy collider;
-        Vector2 offsetPosition = transform.position + directionToPlayer * raycastOffset;
-        RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer, visionRange, obstacleMask);
-        if(hit.collider == null)
-            return false;
+        //float raycastOffset = 0.4f; //So raycast won't hit enemy collider;
+        //Vector2 offsetPosition = transform.position + directionToPlayer * raycastOffset;
+        //RaycastHit2D hit = Physics2D.Raycast(offsetPosition, directionToPlayer, visionRange, obstacleMask);
+        //if(hit.collider == null)
+        //    return false;
 
-        bool hasLineOfSight = hit.collider.CompareTag("Player");
-        return hasLineOfSight;
+        //bool hasLineOfSight = hit.collider.CompareTag("Player");
+        //return hasLineOfSight;
+        return RaycastHitPlayer();
+    }
+
+    private bool RaycastHitPlayer()
+    {
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, directionToPlayer, visionRange, obstacleMask);
+        RaycastHit2D playerHit = new RaycastHit2D();
+        foreach(RaycastHit2D hit in hits)
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                playerHit = hit;
+                break;
+            }
+        }
+
+        float distanceToPlayer = Vector2.Distance(transform.position, playerHit.point);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit == playerHit)
+                continue;
+
+            if (hit.collider == coll)
+                continue;
+
+            if (Vector2.Distance(transform.position, hit.point) < distanceToPlayer)
+                return false;
+        }
+        return true;
     }
 
     public bool PlayerTooClose()

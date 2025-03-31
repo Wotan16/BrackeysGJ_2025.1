@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrowPrefab: {fileID: 3904187207387800412}
-  speed: 10
+  speed: 18
 --- !u!1 &6975479197800258739
 GameObject:
   m_ObjectHideFlags: 0

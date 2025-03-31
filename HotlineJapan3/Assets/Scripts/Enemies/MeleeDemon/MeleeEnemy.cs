@@ -9,7 +9,6 @@ public class MeleeEnemy : EnemyBase
     private FollowerEntity follower;
     [SerializeField] private MeleeEnemyAnimator animator;
     [SerializeField] private float attackCooldown;
-    [SerializeField] private Collider2D coll;
     [SerializeField] private EnemySwordHitbox swordHitbox;
     [SerializeField] private float stunDuration;
     [SerializeField] private Rigidbody2D rb2D;

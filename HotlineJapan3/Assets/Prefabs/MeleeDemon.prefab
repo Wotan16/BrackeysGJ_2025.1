@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1417799873746501354}
@@ -96,10 +96,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6627121925120169474}
   - component: {fileID: 4702084879012604641}
+  - component: {fileID: 7704263790823036858}
   - component: {fileID: 8938396713166525558}
   - component: {fileID: 4398935941280371340}
   - component: {fileID: 4116151251291086448}
-  - component: {fileID: 7704263790823036858}
   - component: {fileID: 1062223408242382518}
   m_Layer: 8
   m_Name: MeleeDemon
@@ -137,26 +137,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4b156d207a15a43a01444539990c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 10
   visionAngle: 69.8
   visionRange: 15
-  attackRange: 0.75
+  attackRange: 1.5
   destinationSetter: {fileID: 4398935941280371340}
   healthSystem: {fileID: 7704263790823036858}
+  coll: {fileID: 4116151251291086448}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 320
   CurrentState: 
   alerted: 0
-  alertRange: 3
-  agroRange: 0.75
+  alertRange: 6
+  agroRange: 1.5
   animator: {fileID: 3576273001057957456}
   attackCooldown: 0.5
-  coll: {fileID: 4116151251291086448}
   swordHitbox: {fileID: 3172998828384439642}
   stunDuration: 1
   rb2D: {fileID: 1062223408242382518}
   KnockedDown: 0
+  patrolPoints: []
+--- !u!114 &7704263790823036858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3945816686578929335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc5a729ce85b24499ad1ae6f016a982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 1
 --- !u!114 &8938396713166525558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1073741831
   shape:
-    radius: 0.5
+    radius: 0.6
     height: 2
   movement:
     follower:
@@ -266,20 +280,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.3
---- !u!114 &7704263790823036858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3945816686578929335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcc5a729ce85b24499ad1ae6f016a982, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 1
+  m_Radius: 0.6
 --- !u!50 &1062223408242382518
 Rigidbody2D:
   serializedVersion: 5

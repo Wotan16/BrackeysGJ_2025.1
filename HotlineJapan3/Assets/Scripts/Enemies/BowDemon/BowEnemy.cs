@@ -10,7 +10,6 @@ public class BowEnemy : EnemyBase
     [SerializeField] private float attackCooldown;
     [SerializeField] private float timeToAim;
     [SerializeField] private BowEnemyAnimator animator;
-    [SerializeField] private Collider2D coll;
     [SerializeField] private Arrow arrowPrefab;
     [SerializeField] private Rigidbody2D rb2D;
     private bool canSeePlayer;
