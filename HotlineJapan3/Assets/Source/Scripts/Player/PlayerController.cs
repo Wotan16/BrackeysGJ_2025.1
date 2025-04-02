@@ -48,9 +48,12 @@ public class PlayerController : MonoBehaviour
     private float parryCDDelta;
     private bool canParry => parryCDDelta <= 0;
 
-    [SerializeField] private PlayerAnimator animator;
-    
     private bool isBusy => attacking || dashing;
+
+    [Header("Other References")]
+    [SerializeField] private PlayerAnimator animator;
+    [SerializeField] private PlayerCameraTarget cameraTargetController;
+    public Transform cameraTarget => cameraTargetController.CameraTarget;
 
     private void Awake()
     {

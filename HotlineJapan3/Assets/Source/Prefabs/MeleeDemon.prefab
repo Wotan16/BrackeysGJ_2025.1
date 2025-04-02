@@ -151,12 +151,12 @@ MonoBehaviour:
   alerted: 0
   alertRange: 6
   agroRange: 1.5
-  animator: {fileID: 3576273001057957456}
   attackCooldown: 0.5
-  swordHitbox: {fileID: 3172998828384439642}
   stunDuration: 1
-  rb2D: {fileID: 1062223408242382518}
   KnockedDown: 0
+  animator: {fileID: 3576273001057957456}
+  swordHitbox: {fileID: 3172998828384439642}
+  rb2D: {fileID: 1062223408242382518}
   patrolPoints: []
 --- !u!114 &7704263790823036858
 MonoBehaviour:
@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 3620825992399624115}
   - component: {fileID: 1994504008156511052}
   - component: {fileID: 3576273001057957456}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6103948191752432292}
   - component: {fileID: 455038576341082842}
   - component: {fileID: 7278138232940477863}
+  - component: {fileID: 4815146926176451609}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -36,6 +37,7 @@ Transform:
   m_Children:
   - {fileID: 6113914184948745655}
   - {fileID: 7565568725128319380}
+  - {fileID: 8807912904675437224}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &7126358940992206839
@@ -146,6 +148,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 455038576341082842}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnLook_Input
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4815146926176451609}
+        m_TargetAssemblyTypeName: PlayerCameraTarget, Assembly-CSharp
         m_MethodName: OnLook_Input
         m_Mode: 0
         m_Arguments:
@@ -281,6 +295,7 @@ MonoBehaviour:
   parryDuration: 0.4
   parryCooldown: 0.5
   animator: {fileID: 208777741037645289}
+  cameraTargetController: {fileID: 4815146926176451609}
 --- !u!114 &7278138232940477863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,6 +309,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepDistance: 1
+--- !u!114 &4815146926176451609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291298571275412074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e792a4913f1bf047ad03865990c0d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRange: 5
+  cameraTarget: {fileID: 8807912904675437224}
 --- !u!1 &710404915612726148
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,6 +409,37 @@ PolygonCollider2D:
       - {x: -0.019295692, y: -0.004820019}
       - {x: 0.73979723, y: -0.12981662}
   m_UseDelaunayMesh: 0
+--- !u!1 &3096851280949699327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8807912904675437224}
+  m_Layer: 8
+  m_Name: PlayerCameraTarget
+  m_TagString: PlayerCameraTarget
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8807912904675437224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3096851280949699327}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5589223481364983805}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6603635474536061953
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +526,7 @@ GameObject:
   - component: {fileID: 935988054010234900}
   - component: {fileID: 208777741037645289}
   - component: {fileID: 3851720700851108739}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

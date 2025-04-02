@@ -12,6 +12,6 @@ public class PlayerCamera : MonoBehaviour
 
     private void Start()
     {
-        CMCamera.Target.TrackingTarget = PlayerController.Instance.transform;
+        CMCamera.Target.TrackingTarget = PlayerController.Instance.cameraTarget;
     }
 }
