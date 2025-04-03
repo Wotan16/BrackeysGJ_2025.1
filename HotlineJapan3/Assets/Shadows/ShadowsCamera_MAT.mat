@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shadows_MAT
+  m_Name: ShadowsCamera_MAT
   m_Shader: {fileID: -6465566751694194690, guid: 03cb2f2bf4f75aa47a8171cf43f515fd, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -72,7 +72,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Intensity: 0.68
+    - _Intensity: 0.79
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ZWrite: 0

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ShadowsController : MonoBehaviour
@@ -14,5 +15,17 @@ public class ShadowsController : MonoBehaviour
         shadowsCamera.transform.position = new Vector3(transform.position.x, transform.position.y, shadowsCamera.transform.position.z);
         shadowsObject.transform.localScale = new Vector3(xScale, verticalSize, 1);
         shadowsObject.position = transform.position + new Vector3(offset.x, offset.y);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(DisableCameraAfterTime());
+    }
+
+    private IEnumerator DisableCameraAfterTime()
+    {
+        yield return new WaitForSeconds(0.2f);
+        shadowsCamera.enabled = false;
+        shadowsCamera.gameObject.SetActive(false);
     }
 }

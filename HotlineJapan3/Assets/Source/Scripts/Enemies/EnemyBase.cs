@@ -26,6 +26,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public bool alerted = false;
     public float alertRange;
     [SerializeField] private float agroRange;
+    [SerializeField] private GameObject shadowsObject;
 
     protected virtual void Awake()
     {
@@ -64,6 +65,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         OnAnyEnemyDead?.Invoke(this);
         AlertEnemiesAround(alertRange);
+        shadowsObject.SetActive(false);
     }
 
     public void AlertEnemiesAround(float radius)
