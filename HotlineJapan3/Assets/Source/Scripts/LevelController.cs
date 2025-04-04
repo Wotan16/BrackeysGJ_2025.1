@@ -1,10 +1,12 @@
-using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    public event Action OnLevelCopleted;
+
     public static LevelController Instance { get; private set; }
 
     private VictoryArea victoryArea;
@@ -74,8 +76,9 @@ public class LevelController : MonoBehaviour
     {
         if (enemyList.Count == 0)
         {
-            //maybe some UI that tells if all enemies are dead?
             victoryArea.gameObject.SetActive(true);
+            OnLevelCopleted?.Invoke();
+
         }
     }
     private void OnDestroy()
