@@ -11,7 +11,8 @@ public static class SceneLoader
         FloorTwo,
         FloorThree,
         FinalFloor,
-        VictoryScene
+        VictoryScene,
+        TestScene
     }
 
     public static Scene ActiveScene { get { return targetScene; } }

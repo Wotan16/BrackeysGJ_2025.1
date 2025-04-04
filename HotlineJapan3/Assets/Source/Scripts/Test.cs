@@ -4,9 +4,9 @@ public class Test : MonoBehaviour
 {
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            PlayerController.Instance.TakeDamage(null);
+            
         }
     }
 }

@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    private Transform shooterTransform;
     private Rigidbody2D rb2D;
-    private bool isEnemy;
+    public bool isEnemy;
     [SerializeField] private Arrow arrowPrefab;
     [SerializeField] private float speed;
 
@@ -12,37 +13,36 @@ public class Arrow : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
     }
 
-    public void SetArrow(Vector2 direction, bool isEnemy)
+    public void SetArrow(Vector2 direction, bool isEnemy, Transform shooterTransform)
     {
         transform.up = direction;
         rb2D.linearVelocity = direction.normalized * speed;
         this.isEnemy = isEnemy;
+        this.shooterTransform = shooterTransform;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Projectile"))
+            return;
+
+        if (collision.gameObject.layer == CustomLayerManager.wallsLayer)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (isEnemy)
         {
             if (collision.CompareTag("Player"))
             {
                 PlayerController player = PlayerController.Instance;
-                player.TakeDamage((Vector2 parryDirection) =>
+                if(player.TakeDamage(new AttackInfo(1, AttackInfo.AttackType.Projectile), OnParried))
                 {
-                    AudioManager.PlaySound(SoundType.ArrowParry);
-                    Arrow arrow = Instantiate(arrowPrefab, player.transform.position, player.transform.rotation);
-                    arrow.SetArrow(parryDirection, false);
-                });
-
-                Destroy(gameObject);
+                    Destroy(gameObject);
+                }
                 return;
             }
-
-            if (collision.CompareTag("Enemy"))
-            {
-                return;
-            }
-
-            Destroy(gameObject);
         }
         else
         {
@@ -51,15 +51,25 @@ public class Arrow : MonoBehaviour
                 if (collision.TryGetComponent(out IDamageable health))
                 {
                     health.TakeDamage(1);
+                    Destroy(gameObject);
+                    return;
                 }
             }
-
-            if (collision.CompareTag("Player"))
-            {
-                return;
-            }
-
-            Destroy (gameObject);
         }
+    }
+
+    private void OnParried(Vector2 parryDirection)
+    {
+        AudioManager.PlaySound(SoundType.ArrowParry);
+        Destroy(gameObject);
+    }
+
+    public void Deflect(GameObject deflectCharacterObject)
+    {
+        Vector2 deflectDirection = shooterTransform.position - transform.position;
+        Arrow arrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
+        arrow.SetArrow(deflectDirection, deflectCharacterObject.CompareTag("Enemy"), deflectCharacterObject.transform);
+        AudioManager.PlaySound(SoundType.ArrowParry);
+        Destroy(gameObject);
     }
 }

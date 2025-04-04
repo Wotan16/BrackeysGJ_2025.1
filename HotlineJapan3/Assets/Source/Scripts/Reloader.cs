@@ -10,5 +10,10 @@ public class Reloader : MonoBehaviour
         {
             SceneLoader.Load(SceneLoader.ActiveScene);
         }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SceneLoader.Load(scene);
+        }
     }
 }

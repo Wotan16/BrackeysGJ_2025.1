@@ -61,7 +61,7 @@ public class BowAimingState : IState
     {
         Vector2 directionToPlayer = PlayerController.Instance.transform.position - enemy.transform.position;
         Arrow arrow = GameObject.Instantiate(arrowPrefab, enemy.transform.position, enemy.transform.rotation);
-        arrow.SetArrow(directionToPlayer, true);
+        arrow.SetArrow(directionToPlayer, true, enemy.transform);
         AudioManager.PlaySound(SoundType.BowShot);
     }
 
@@ -73,7 +73,7 @@ public class BowAimingState : IState
         rotation = playerPosition.x < rb2D.position.x ? rotation : -rotation;
         rb2D.MoveRotation(rotation);
     }
-
+        
     public void FixedTick()
     {
         RotateTowardsPlayer();

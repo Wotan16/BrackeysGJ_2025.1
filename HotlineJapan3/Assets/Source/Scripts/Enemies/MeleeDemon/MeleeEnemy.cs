@@ -29,7 +29,8 @@ public class MeleeEnemy : EnemyBase
 
     private void SwordHitbox_OnHitPlayer(PlayerController player)
     {
-        player.TakeDamage((Vector2 parryDireciton) =>
+        player.TakeDamage(new AttackInfo(1, AttackInfo.AttackType.Melee),
+            (Vector2 parryDireciton) =>
         {
             AudioManager.PlaySound(SoundType.SwordClash);
             KnockedDown = true;

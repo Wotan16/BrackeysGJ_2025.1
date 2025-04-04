@@ -20,16 +20,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb2D;
     private Vector2 mousePosition;
     private Vector2 inputDireciton;
+    private float moveSpeed;
 
-    [Header("Dash")]
-    [SerializeField] private float dashDistance;
-    [SerializeField] private float dashSpeed;
-    [SerializeField] private float dashCooldown;
-    private float dashDistanceDelta;
-    private float dashCDDelta;
-    private bool canDash => dashCDDelta <= 0;
-    private bool dashing => dashDistanceDelta < dashDistance;
-    private Vector2 dashDirection;
+    [Header("Running")]
+    [SerializeField] private float runningSpeed;
+    private bool runButtonPressed;
+    private bool running;
 
     [Header("Attack")]
     [SerializeField] private float attackCooldown;
@@ -38,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private bool attacking;
     [SerializeField] private float hitboxDuration;
     private float hitboxDurationDelta;
-    private bool hitboxActive => hitboxDurationDelta <= 0;
+    private bool hitboxActive => hitboxDurationDelta > 0;
     [SerializeField] private SwordHitbox swordHitbox;
 
     [Header("Parry")]
@@ -48,11 +44,12 @@ public class PlayerController : MonoBehaviour
     private float parryCDDelta;
     private bool canParry => parryCDDelta <= 0;
 
-    private bool isBusy => attacking || dashing;
+    private bool isBusy => attacking;
 
     [Header("Other References")]
     [SerializeField] private PlayerAnimator animator;
     [SerializeField] private PlayerCameraTarget cameraTargetController;
+    [SerializeField] private Collider2D projectileCollider;
     public Transform cameraTarget => cameraTargetController.CameraTarget;
 
     private void Awake()
@@ -101,18 +98,31 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleCooldowns();
+        HandleRunning();
+        HandleSpeedChange();
         animator.SetMoving(inputDireciton != Vector2.zero);
-        if (dashing)
-            return;
         HandleMovement();
+    }
+
+    private void HandleRunning()
+    {
+        running = !isBusy && inputDireciton != Vector2.zero && runButtonPressed;
+        animator.SetRunning(running);
+        projectileCollider.enabled = !running;
+    }
+
+    private void HandleSpeedChange()
+    {
+        if (running)
+        {
+            moveSpeed = runningSpeed;
+            return;
+        }
+        moveSpeed = parrying ? parryingMoveSpeed : defautMoveSpeed;
     }
 
     private void FixedUpdate()
     {
-        if (dashing)
-        {
-            HandleDashing();
-        }
         HandleRotation();
     }
 
@@ -121,11 +131,6 @@ public class PlayerController : MonoBehaviour
         if(parryCDDelta > 0)
         {
             parryCDDelta -= Time.deltaTime;
-        }
-
-        if (dashCDDelta > 0)
-        {
-            dashCDDelta -= Time.deltaTime;
         }
 
         if (attackCDDelta > 0)
@@ -139,17 +144,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleDashing()
-    {
-        float moveAmount = Time.fixedDeltaTime * dashSpeed;
-        Vector2 moveVector = dashDirection * moveAmount;
-        rb2D.MovePosition(rb2D.position + moveVector);
-        dashDistanceDelta += moveAmount;
-    }
-
     private void HandleMovement()
     {
-        float moveSpeed = parrying ? parryingMoveSpeed : defautMoveSpeed;
         rb2D.linearVelocity = inputDireciton.normalized * moveSpeed;
     }
 
@@ -168,6 +164,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         InterruptParry();
+        InterruptRun();
         attackCDDelta = attackCooldown;
         attacking = true;
         animator.Attack();
@@ -183,23 +180,12 @@ public class PlayerController : MonoBehaviour
         attacking = false;
     }
 
-    private void Dash()
-    {
-        if (isBusy || !canDash || inputDireciton == Vector2.zero)
-            return;
-
-        dashDistanceDelta = 0;
-        dashCDDelta = dashCooldown;
-        InterruptParry();
-        dashDirection = inputDireciton.normalized;
-        animator.SetDashing(dashing);
-    }
-
     private void Parry()
     {
         if(isBusy || !canParry)
             return;
 
+        InterruptRun();
         parrying = true;
         parryCDDelta = parryCooldown;
         animator.SetParrying(parrying);
@@ -218,16 +204,18 @@ public class PlayerController : MonoBehaviour
         animator.SetParrying(parrying);
     }
 
-    //Vector2 in Action is the direction where player is looking
-    public bool TakeDamage(Action<Vector2> OnParried)
+    //Vector2 in Action<Vector2> is the direction where player is looking
+    public bool TakeDamage(AttackInfo hitInfo, Action<Vector2> OnParried)
     {
         if(IsDead)
-            return true;
+            return false;
+
+        if(hitInfo.type == AttackInfo.AttackType.Projectile && hitboxActive)
+            return false;
 
         if (parrying)
         {
             OnParried?.Invoke(transform.up);
-            Debug.Log("Parried");
             return false;
         }
 
@@ -240,6 +228,13 @@ public class PlayerController : MonoBehaviour
         AudioManager.PlaySound(SoundType.PlayerDeath);
         ControlledByPlayer = false;
         return true;
+    }
+
+    private void InterruptRun()
+    {
+        runButtonPressed = false;
+        running = false;
+        animator.SetRunning(running);
     }
 
     #region InputEvents
@@ -285,12 +280,20 @@ public class PlayerController : MonoBehaviour
     public void OnDash_Input(InputAction.CallbackContext context)
     {
         if (!ControlledByPlayer)
+        {
+            runButtonPressed = false;
             return;
+        }
 
-        if (!context.started)
-            return;
+        if (context.started)
+        {
+            runButtonPressed = true;
+        }
 
-        Dash();
+        if (context.canceled)
+        {
+            runButtonPressed = false;
+        }
     }
 
     #endregion

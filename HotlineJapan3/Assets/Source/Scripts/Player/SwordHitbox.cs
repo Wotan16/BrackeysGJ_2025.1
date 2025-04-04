@@ -5,6 +5,7 @@ public class SwordHitbox : MonoBehaviour
 {
     [SerializeField] private GameObject damageColliderObject;
     [SerializeField] private List<Transform> raycastPoints;
+    [SerializeField] private GameObject playerObject;
 
     public void EnableHitbox()
     {
@@ -18,6 +19,16 @@ public class SwordHitbox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Projectile"))
+        {
+            if (!collision.TryGetComponent(out Arrow arrow))
+                return;
+            if (!arrow.isEnemy)
+                return;
+            arrow.Deflect(playerObject);
+            return;
+        }
+
         if (collision.CompareTag("Enemy"))
         {
             bool hitEnemy = false;

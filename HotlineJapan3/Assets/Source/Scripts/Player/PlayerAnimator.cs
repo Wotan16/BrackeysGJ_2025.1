@@ -8,7 +8,7 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private Animator animator;
     private const string ATTACK_TRIGGER = "Attack";
     private const string PARRY_BOOL = "Parrying";
-    private const string DASHING_BOOL = "Dashing";
+    private const string RUNNING_BOOL = "Running";
     private const string MOVING_BOOL = "Moving";
     private const string DEATH_TRIGGER = "Death";
 
@@ -27,9 +27,9 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetTrigger(DEATH_TRIGGER);
     }
 
-    public void SetDashing(bool dashing)
+    public void SetRunning(bool running)
     {
-        animator.SetBool(DASHING_BOOL, dashing);
+        animator.SetBool(RUNNING_BOOL, running);
     }
 
     public void SetMoving(bool moving)
