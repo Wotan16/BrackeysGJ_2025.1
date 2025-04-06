@@ -8,7 +8,7 @@ public class DirectionArrowUI : MonoBehaviour
     public Transform targetTransform;
     [SerializeField] private RectTransform iconTransform;
     [SerializeField] private Canvas canvas;
-    private RectTransform rectTransform;
+    private Rect canvasRect;
     [SerializeField] private float offset;
     public enum ArrowOrientation
     {
@@ -28,7 +28,7 @@ public class DirectionArrowUI : MonoBehaviour
 
     private void Awake()
     {
-        rectTransform = canvas.GetComponent<RectTransform>();
+        canvasRect = canvas.GetComponent<RectTransform>().rect;
     }
 
     private void Start()
@@ -49,50 +49,66 @@ public class DirectionArrowUI : MonoBehaviour
             return;
 
         Vector3 targetScreenPosition = Camera.main.WorldToScreenPoint(targetTransform.position);
+        ArrowOrientation orientation = GetArrowOrientation();
+        SetArrowDirection(orientation);
 
-        float x = Mathf.Clamp(targetScreenPosition.x, 0 + offset, rectTransform.rect.width - offset);
-        float y = Mathf.Clamp(targetScreenPosition.y, 0 + offset, rectTransform.rect.height - offset);
-        Vector2 newPosition = new Vector2(x, y);
+        Vector2 newPosition = Vector2.zero;
+
+        if (IsScreenPositionInsideCanvas(targetScreenPosition))
+        {
+            newPosition = GetPositionWithOffset(targetScreenPosition, orientation);
+        }
+        else
+        {
+            float x = Mathf.Clamp(targetScreenPosition.x, 0 + offset, canvasRect.width - offset);
+            float y = Mathf.Clamp(targetScreenPosition.y, 0 + offset, canvasRect.height - offset);
+            newPosition = new Vector2(x, y);
+        }
+
         iconTransform.position = newPosition;
+    }
 
+    private ArrowOrientation GetArrowOrientation()
+    {
         Vector2 iconToTargetVector = targetTransform.position - PlayerController.Instance.transform.position;
         if (Mathf.Abs(iconToTargetVector.x) > Mathf.Abs(iconToTargetVector.y))
         {
             if (iconToTargetVector.x > 0)
-                SetArrowDirection(ArrowOrientation.Right);
+                return ArrowOrientation.Right;
             else
-                SetArrowDirection(ArrowOrientation.Left);
+                return ArrowOrientation.Left;
         }
         else
         {
             if (iconToTargetVector.y > 0)
-                SetArrowDirection(ArrowOrientation.Up);
+                return ArrowOrientation.Up;
             else
-                SetArrowDirection(ArrowOrientation.Down);
+                return ArrowOrientation.Down;
         }
     }
 
-    //private void SetArrowDirection(ArrowOrientation arrowOrientation)
-    //{
-    //    float angle = 0;
-    //    switch (arrowOrientation)
-    //    {
-    //        case ArrowOrientation.Up:
-    //            angle = 0;
-    //            break;
-    //            case ArrowOrientation.Right:
-    //            angle = 90;
-    //            break;
-    //        case ArrowOrientation.Down:
-    //            angle = 180;
-    //            break;
-    //        case ArrowOrientation.Left:
-    //            angle = 270;
-    //            break;
-    //    }
-    //    Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.back);
-    //    iconTransform.rotation = rotation;
-    //}
+    private Vector2 GetPositionWithOffset(Vector2 position, ArrowOrientation arrowOrientation)
+    {
+        float angle = 0;
+        switch (arrowOrientation)
+        {
+            case ArrowOrientation.Down:
+                angle = 0;
+                break;
+            case ArrowOrientation.Left:
+                angle = 90;
+                break;
+            case ArrowOrientation.Up:
+                angle = 180;
+                break;
+            case ArrowOrientation.Right:
+                angle = 270;
+                break;
+        }
+        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.back);
+        Vector2 offsetVector = (rotation * Vector2.up) * offset;
+        return position + offsetVector;
+    }
 
     private void SetArrowDirection(ArrowOrientation arrowOrientation)
     {
@@ -104,8 +120,8 @@ public class DirectionArrowUI : MonoBehaviour
 
     private bool IsScreenPositionInsideCanvas(Vector2 screenPosition)
     {
-        bool xValid = screenPosition.x > 0 && screenPosition.x < rectTransform.rect.width;
-        bool yValid = screenPosition.y > 0 && screenPosition.y < rectTransform.rect.height;
+        bool xValid = screenPosition.x > 0 && screenPosition.x < canvasRect.width;
+        bool yValid = screenPosition.y > 0 && screenPosition.y < canvasRect.height;
         return xValid && yValid;
     }
 }
