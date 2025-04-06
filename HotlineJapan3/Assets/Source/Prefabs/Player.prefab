@@ -283,11 +283,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControlledByPlayer: 1
-  Invulnerable: 0
+  Invulnerable: 1
   IsDead: 0
   defautMoveSpeed: 10
   parryingMoveSpeed: 6
-  runningSpeed: 0
+  runningSpeed: 15
   attackCooldown: 0.4
   hitboxDuration: 0.2
   swordHitbox: {fileID: 7293418802160486465}
@@ -295,7 +295,7 @@ MonoBehaviour:
   parryCooldown: 0.5
   animator: {fileID: 208777741037645289}
   cameraTargetController: {fileID: 4815146926176451609}
-  projectileCollider: {fileID: 0}
+  projectileCollider: {fileID: 1551094329845667591}
 --- !u!114 &4815146926176451609
 MonoBehaviour:
   m_ObjectHideFlags: 0
