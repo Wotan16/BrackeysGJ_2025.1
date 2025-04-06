@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ControlledByPlayer: 1
-  Invulnerable: 1
+  Invulnerable: 0
   IsDead: 0
   defautMoveSpeed: 10
   parryingMoveSpeed: 6
