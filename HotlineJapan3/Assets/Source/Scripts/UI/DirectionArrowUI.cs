@@ -10,21 +10,6 @@ public class DirectionArrowUI : MonoBehaviour
     [SerializeField] private Canvas canvas;
     private Rect canvasRect;
     [SerializeField] private float offset;
-    public enum ArrowOrientation
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
-
-    [Serializable]
-    private class OrientationIconPair
-    {
-        public ArrowOrientation orientation;
-        public GameObject imageObject;
-    }
-    [SerializeField] private List<OrientationIconPair> pairs;
 
     private void Awake()
     {
@@ -49,14 +34,13 @@ public class DirectionArrowUI : MonoBehaviour
             return;
 
         Vector3 targetScreenPosition = Camera.main.WorldToScreenPoint(targetTransform.position);
-        ArrowOrientation orientation = GetArrowOrientation();
-        SetArrowDirection(orientation);
 
         Vector2 newPosition = Vector2.zero;
+        RotateArrowTowardsTarget();
 
         if (IsScreenPositionInsideCanvas(targetScreenPosition))
         {
-            newPosition = GetPositionWithOffset(targetScreenPosition, orientation);
+            newPosition = targetScreenPosition;
         }
         else
         {
@@ -68,54 +52,12 @@ public class DirectionArrowUI : MonoBehaviour
         iconTransform.position = newPosition;
     }
 
-    private ArrowOrientation GetArrowOrientation()
+    private void RotateArrowTowardsTarget()
     {
-        Vector2 iconToTargetVector = targetTransform.position - PlayerController.Instance.transform.position;
-        if (Mathf.Abs(iconToTargetVector.x) > Mathf.Abs(iconToTargetVector.y))
-        {
-            if (iconToTargetVector.x > 0)
-                return ArrowOrientation.Right;
-            else
-                return ArrowOrientation.Left;
-        }
-        else
-        {
-            if (iconToTargetVector.y > 0)
-                return ArrowOrientation.Up;
-            else
-                return ArrowOrientation.Down;
-        }
-    }
-
-    private Vector2 GetPositionWithOffset(Vector2 position, ArrowOrientation arrowOrientation)
-    {
-        float angle = 0;
-        switch (arrowOrientation)
-        {
-            case ArrowOrientation.Down:
-                angle = 0;
-                break;
-            case ArrowOrientation.Left:
-                angle = 90;
-                break;
-            case ArrowOrientation.Up:
-                angle = 180;
-                break;
-            case ArrowOrientation.Right:
-                angle = 270;
-                break;
-        }
-        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.back);
-        Vector2 offsetVector = (rotation * Vector2.up) * offset;
-        return position + offsetVector;
-    }
-
-    private void SetArrowDirection(ArrowOrientation arrowOrientation)
-    {
-        foreach(var pair in pairs)
-        {
-            pair.imageObject.SetActive(pair.orientation == arrowOrientation);
-        }
+        Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(PlayerController.Instance.transform.position);
+        Vector2 playerToTargetVector = iconTransform.position - playerScreenPosition;
+        Quaternion newRotation = Quaternion.FromToRotation(Vector3.up, playerToTargetVector);
+        iconTransform.rotation = newRotation;
     }
 
     private bool IsScreenPositionInsideCanvas(Vector2 screenPosition)
