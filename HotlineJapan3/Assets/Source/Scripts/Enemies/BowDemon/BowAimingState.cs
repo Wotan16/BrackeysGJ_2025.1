@@ -27,7 +27,6 @@ public class BowAimingState : IState
     public void OnEnter()
     {
         animator.SetAiming(true);
-        //isAiming = true;
     }
 
     public void OnExit()
@@ -64,18 +63,9 @@ public class BowAimingState : IState
         arrow.SetArrow(directionToPlayer, true, enemy.transform);
         AudioManager.PlaySound(SoundType.BowShot);
     }
-
-    private void RotateTowardsPlayer()
-    {
-        Vector2 playerPosition = PlayerController.Instance.transform.position;
-        Vector2 direction = (playerPosition - rb2D.position).normalized;
-        float rotation = Vector2.Angle(Vector2.up, direction);
-        rotation = playerPosition.x < rb2D.position.x ? rotation : -rotation;
-        rb2D.MoveRotation(rotation);
-    }
         
     public void FixedTick()
     {
-        RotateTowardsPlayer();
+        enemy.RotateTowardsPlayer();
     }
 }

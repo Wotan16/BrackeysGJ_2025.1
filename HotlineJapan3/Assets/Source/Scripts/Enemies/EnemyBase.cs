@@ -20,6 +20,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     protected StateMachine stateMachine;
     [SerializeField] protected Collider2D coll;
     [SerializeField] protected LayerMask obstacleMask;
+    [SerializeField] protected Rigidbody2D rb2D;
 
     public string CurrentState;
     public bool IsDead => healthSystem.IsDead;
@@ -133,6 +134,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             if (hit.collider == coll)
                 continue;
 
+            if(hit.collider.CompareTag("Enemy"))
+                continue;
+
             if (hit.distance < distanceToPlayer)
                 return false;
         }
@@ -225,5 +229,14 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
 
         return closestHit.point;
+    }
+
+    public void RotateTowardsPlayer()
+    {
+        Vector2 playerPosition = PlayerController.Instance.transform.position;
+        Vector2 direction = (playerPosition - rb2D.position).normalized;
+        float rotation = Vector2.Angle(Vector2.up, direction);
+        rotation = playerPosition.x < rb2D.position.x ? rotation : -rotation;
+        rb2D.MoveRotation(rotation);
     }
 }

@@ -16,7 +16,6 @@ public class MeleeEnemy : EnemyBase
     [Header("Sword enemy references")]
     [SerializeField] private MeleeEnemyAnimator animator;
     [SerializeField] private EnemySwordHitbox swordHitbox;
-    [SerializeField] private Rigidbody2D rb2D;
     [SerializeField] private List<Transform> patrolPoints;
 
     protected override void Start()

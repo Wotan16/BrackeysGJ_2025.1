@@ -15,7 +15,7 @@ public class BowEnemy : EnemyBase
     [Header("Bow enemy references")]
     [SerializeField] private BowEnemyAnimator animator;
     [SerializeField] private Arrow arrowPrefab;
-    [SerializeField] private Rigidbody2D rb2D;
+    [SerializeField] private Transform firePoint;
     private bool canSeePlayer;
 
     [SerializeField] private List<Transform> partolPoints;
@@ -30,17 +30,18 @@ public class BowEnemy : EnemyBase
     {
         EmptyState idle = new EmptyState();
         BowChaseState chase = new BowChaseState(this, destinationSetter, follower, playerTransform, animator, moveSpeed);
-        BowAimingState aiming = new BowAimingState(this, animator, timeToAim, attackCooldown, arrowPrefab, rb2D);
+        //BowAimingState aiming = new BowAimingState(this, animator, timeToAim, attackCooldown, arrowPrefab, rb2D);
+        BowShootState shoot = new BowShootState(this, animator, arrowPrefab, firePoint);
         BowDeadState dead = new BowDeadState(animator, coll);
 
         Func<bool> AgroCondition() => () => canSeePlayer || alerted || PlayerTooClose();
         Func<bool> DeathCondition() => () => IsDead;
         Func<bool> StartAimingCondition() => () => canSeePlayer;
-        Func<bool> StopAimingCondition() => () => !canSeePlayer;
+        Func<bool> StopAimingCondition() => () => !shoot.isShooting;
 
         stateMachine.AddTransition(idle, chase, AgroCondition());
-        stateMachine.AddTransition(chase, aiming, StartAimingCondition());
-        stateMachine.AddTransition(aiming, chase, StopAimingCondition());
+        stateMachine.AddTransition(chase, shoot, StartAimingCondition());
+        stateMachine.AddTransition(shoot, chase, StopAimingCondition());
         stateMachine.AddAnyTransition(dead, DeathCondition());
 
         stateMachine.SetState(idle);
