@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e082bd64f449f144eadbddd7cd1283e6, type: 3}
-  m_Name: SwordSwing
+  m_Name: BowShot
   m_EditorClassIdentifier: 
-  soundType: 2
+  soundType: 3
   sounds:
-  - {fileID: 8300000, guid: f17dda39539bf9646990c6edd4326ac7, type: 3}
-  volume: 1
+  - {fileID: 8300000, guid: 5467915586c86934c9692bb3bf100e63, type: 3}
+  volume: 0.157
   pitch: 1
   randomPitch: 1
-  maxPitchDistortion: 0.07
+  maxPitchDistortion: 0.05

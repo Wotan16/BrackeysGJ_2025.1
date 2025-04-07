@@ -88,6 +88,16 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public virtual void TakeDamage(int damage)
     {
         healthSystem.TakeDamage(damage);
+        AudioManager.PlaySound(SoundType.SwordHitImpact);
+    }
+
+    public void RotateTowardsPlayer()
+    {
+        Vector2 playerPosition = PlayerController.Instance.transform.position;
+        Vector2 direction = (playerPosition - rb2D.position).normalized;
+        float rotation = Vector2.Angle(Vector2.up, direction);
+        rotation = playerPosition.x < rb2D.position.x ? rotation : -rotation;
+        rb2D.MoveRotation(rotation);
     }
 
     public virtual bool CanSeePlayer()
@@ -229,14 +239,5 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         }
 
         return closestHit.point;
-    }
-
-    public void RotateTowardsPlayer()
-    {
-        Vector2 playerPosition = PlayerController.Instance.transform.position;
-        Vector2 direction = (playerPosition - rb2D.position).normalized;
-        float rotation = Vector2.Angle(Vector2.up, direction);
-        rotation = playerPosition.x < rb2D.position.x ? rotation : -rotation;
-        rb2D.MoveRotation(rotation);
     }
 }

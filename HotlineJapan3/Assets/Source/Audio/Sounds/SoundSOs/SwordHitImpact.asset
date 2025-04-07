@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e082bd64f449f144eadbddd7cd1283e6, type: 3}
-  m_Name: BowShot
+  m_Name: SwordHitImpact
   m_EditorClassIdentifier: 
-  soundType: 3
+  soundType: 7
   sounds:
-  - {fileID: 8300000, guid: 5467915586c86934c9692bb3bf100e63, type: 3}
-  volume: 0.15
+  - {fileID: 8300000, guid: bb4b4f961381e904599c95e9be9dee63, type: 3}
+  volume: 0.597
   pitch: 1
-  randomPitch: 0
-  maxPitchDistortion: 0.1
+  randomPitch: 1
+  maxPitchDistortion: 0.05

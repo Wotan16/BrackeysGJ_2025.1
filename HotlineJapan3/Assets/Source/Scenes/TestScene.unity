@@ -3141,6 +3141,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 455038576341082842, guid: e7df3bd85321a6a469d68ceddd269add, type: 3}
+      propertyPath: Invulnerable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 710404915612726148, guid: e7df3bd85321a6a469d68ceddd269add, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3526,7 +3530,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1834771092054664787, guid: 7c97eb5ddf66c314dad57fa5fa208b68, type: 3}
       propertyPath: orthographic size
-      value: 1
+      value: 11.25
       objectReference: {fileID: 0}
     - target: {fileID: 2436300954189445569, guid: 7c97eb5ddf66c314dad57fa5fa208b68, type: 3}
       propertyPath: m_LocalPosition.x

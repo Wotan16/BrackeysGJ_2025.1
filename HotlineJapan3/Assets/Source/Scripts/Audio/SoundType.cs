@@ -6,5 +6,6 @@ public enum SoundType
     BowShot,
     PlayerDeath,
     ArrowParry,
-    EnemyDeath
+    EnemyDeath,
+    SwordHitImpact,
 }
