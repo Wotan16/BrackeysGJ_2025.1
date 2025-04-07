@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public struct AttackInfo
+public struct AttackHitInfo
 {
     public enum AttackType
     {
@@ -10,10 +10,12 @@ public struct AttackInfo
 
     public int damage;
     public AttackType type;
+    public Vector2 knockback;
 
-    public AttackInfo(int damage, AttackType type)
+    public AttackHitInfo(int damage, AttackType type, Vector2 knockback)
     {
         this.damage = damage;
         this.type = type;
+        this.knockback = knockback;
     }
 }

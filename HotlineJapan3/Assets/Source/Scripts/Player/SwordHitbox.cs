@@ -6,6 +6,7 @@ public class SwordHitbox : MonoBehaviour
     [SerializeField] private GameObject damageColliderObject;
     [SerializeField] private List<Transform> raycastPoints;
     [SerializeField] private GameObject playerObject;
+    [SerializeField] private float knockbackForce;
 
     public void EnableHitbox()
     {
@@ -48,7 +49,8 @@ public class SwordHitbox : MonoBehaviour
             
             if (collision.TryGetComponent(out IDamageable health))
             {
-                health.TakeDamage(1);
+                Vector2 directionToEnemy = playerObject.transform.position - collision.transform.position;
+                health.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Melee, directionToEnemy.normalized * knockbackForce));
             }
         }
     }

@@ -14,11 +14,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1163053848809709331, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.2
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 1163053848809709331, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1376289360955355585, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.044
+      objectReference: {fileID: 0}
+    - target: {fileID: 1376289360955355585, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.092
       objectReference: {fileID: 0}
     - target: {fileID: 1994504008156511052, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
       propertyPath: m_Sprite
@@ -48,6 +56,10 @@ PrefabInstance:
       propertyPath: stunDuration
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5230869167159915227, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 5484723020593026220, guid: d852c79b413b9f84583ca9f5c055bae3, type: 3}
     - target: {fileID: 6627121925120169474, guid: cae03f5cd2684b7468c657367ba5f21c, type: 3}
       propertyPath: m_LocalScale.x
       value: 1

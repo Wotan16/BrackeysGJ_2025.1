@@ -37,7 +37,7 @@ public class Arrow : MonoBehaviour
             if (collision.CompareTag("Player"))
             {
                 PlayerController player = PlayerController.Instance;
-                if(player.TakeDamage(new AttackInfo(1, AttackInfo.AttackType.Projectile), OnParried))
+                if(player.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, Vector2.zero), OnParried))
                 {
                     Destroy(gameObject);
                 }
@@ -50,7 +50,7 @@ public class Arrow : MonoBehaviour
             {
                 if (collision.TryGetComponent(out IDamageable health))
                 {
-                    health.TakeDamage(1);
+                    health.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, transform.up * 100f));
                     Destroy(gameObject);
                     return;
                 }

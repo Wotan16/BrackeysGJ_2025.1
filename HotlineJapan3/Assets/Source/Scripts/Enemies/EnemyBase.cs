@@ -85,9 +85,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     protected abstract void InitializeStateMachine();
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(AttackHitInfo hitInfo)
     {
-        healthSystem.TakeDamage(damage);
+        healthSystem.TakeDamage(hitInfo.damage);
         AudioManager.PlaySound(SoundType.SwordHitImpact);
     }
 

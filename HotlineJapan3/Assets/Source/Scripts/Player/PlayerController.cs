@@ -205,12 +205,12 @@ public class PlayerController : MonoBehaviour
     }
 
     //Vector2 in Action<Vector2> is the direction where player is looking
-    public bool TakeDamage(AttackInfo hitInfo, Action<Vector2> OnParried)
+    public bool TakeDamage(AttackHitInfo hitInfo, Action<Vector2> OnParried)
     {
         if(IsDead)
             return false;
 
-        if(hitInfo.type == AttackInfo.AttackType.Projectile && hitboxActive)
+        if(hitInfo.type == AttackHitInfo.AttackType.Projectile && hitboxActive)
             return false;
 
         if (parrying)
