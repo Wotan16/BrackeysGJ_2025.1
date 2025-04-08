@@ -216,6 +216,10 @@ public class PlayerController : MonoBehaviour
         if (parrying)
         {
             OnParried?.Invoke(transform.up);
+            Vector3 parryDireciton = hitInfo.attackerTransform.position - transform.position;
+            Quaternion vfxRotation = Quaternion.FromToRotation(Vector2.up, parryDireciton);
+            float vfxOffset = 0.5f;
+            VFXManager.CreateParryVFX(transform.position + parryDireciton.normalized * vfxOffset, vfxRotation);
             return false;
         }
 

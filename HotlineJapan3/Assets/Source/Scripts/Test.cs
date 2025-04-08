@@ -6,7 +6,7 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            
+            SceneLoader.Load(SceneLoader.Scene.TestScene);
         }
     }
 }

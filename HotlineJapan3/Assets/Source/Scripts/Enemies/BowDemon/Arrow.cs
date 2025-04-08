@@ -37,7 +37,7 @@ public class Arrow : MonoBehaviour
             if (collision.CompareTag("Player"))
             {
                 PlayerController player = PlayerController.Instance;
-                if(player.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, Vector2.zero), OnParried))
+                if(player.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, transform, Vector2.zero), OnParried))
                 {
                     Destroy(gameObject);
                 }
@@ -50,7 +50,7 @@ public class Arrow : MonoBehaviour
             {
                 if (collision.TryGetComponent(out IDamageable health))
                 {
-                    health.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, transform.up * 100f));
+                    health.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, transform, transform.up * 100f));
                     Destroy(gameObject);
                     return;
                 }
@@ -69,7 +69,11 @@ public class Arrow : MonoBehaviour
         Vector2 deflectDirection = shooterTransform.position - transform.position;
         Arrow arrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
         arrow.SetArrow(deflectDirection, deflectCharacterObject.CompareTag("Enemy"), deflectCharacterObject.transform);
+
         AudioManager.PlaySound(SoundType.ArrowParry);
+        Quaternion rotation = Quaternion.FromToRotation(Vector2.up, deflectDirection);
+        VFXManager.CreateParryVFX(transform.position, rotation);
+
         Destroy(gameObject);
     }
 }

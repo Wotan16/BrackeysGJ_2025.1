@@ -50,7 +50,7 @@ public class SwordHitbox : MonoBehaviour
             if (collision.TryGetComponent(out IDamageable health))
             {
                 Vector2 directionToEnemy = playerObject.transform.position - collision.transform.position;
-                health.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Melee, directionToEnemy.normalized * knockbackForce));
+                health.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Melee, playerObject.transform, directionToEnemy.normalized * knockbackForce));
             }
         }
     }
