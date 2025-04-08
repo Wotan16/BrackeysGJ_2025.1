@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class DeathUI : WindowUI
 {
-    [SerializeField] private Button mainMenuButton;
+    //[SerializeField] private Button mainMenuButton;
 
-    private void Awake()
-    {
-        mainMenuButton.onClick.AddListener(() =>
-        {
-            SceneLoader.Load(SceneLoader.Scene.MainMenuScene);
-        });
-    }
+    //private void Awake()
+    //{
+    //    mainMenuButton.onClick.AddListener(() =>
+    //    {
+    //        SceneLoader.Load(SceneLoader.Scene.MainMenuScene);
+    //    });
+    //}
 }
