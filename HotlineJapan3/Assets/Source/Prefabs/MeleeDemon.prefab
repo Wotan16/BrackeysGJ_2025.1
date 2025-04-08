@@ -148,6 +148,7 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 320
+  rb2D: {fileID: 1062223408242382518}
   CurrentState: 
   alerted: 0
   alertRange: 6
@@ -158,7 +159,6 @@ MonoBehaviour:
   KnockedDown: 0
   animator: {fileID: 3576273001057957456}
   swordHitbox: {fileID: 3172998828384439642}
-  rb2D: {fileID: 1062223408242382518}
   patrolPoints: []
 --- !u!114 &7704263790823036858
 MonoBehaviour:
@@ -223,7 +223,7 @@ MonoBehaviour:
         value: -1
       tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
       traversableTags: -1
-    enableLocalAvoidance: 0
+    enableLocalAvoidance: 1
     enableGravity: 1
   autoRepathBacking:
     mode: 2
