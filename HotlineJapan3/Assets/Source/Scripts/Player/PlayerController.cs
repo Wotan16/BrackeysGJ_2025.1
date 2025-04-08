@@ -220,6 +220,7 @@ public class PlayerController : MonoBehaviour
             Quaternion vfxRotation = Quaternion.FromToRotation(Vector2.up, parryDireciton);
             float vfxOffset = 0.5f;
             VFXManager.CreateParryVFX(transform.position + parryDireciton.normalized * vfxOffset, vfxRotation);
+            CameraShakeController.ShakeCamera();
             return false;
         }
 

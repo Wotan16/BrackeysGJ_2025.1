@@ -32,6 +32,9 @@ public class CameraShakeController : MonoBehaviour
 
     public static void ShakeCamera()
     {
+        if (Instance == null)
+            return;
+
         Instance.impulseSource.GenerateImpulseWithForce(Instance.defaultShakeForce);
     }
 
