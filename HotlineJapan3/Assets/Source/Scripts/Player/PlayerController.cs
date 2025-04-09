@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public bool ControlledByPlayer = true;
     public bool Invulnerable = false;
     public bool IsDead = false;
+    [Tooltip("Angle of parry/deflect. if angle between player look direction and direction to attacker is bigger than this, parry/deflect will not protect from attack")]
+    [SerializeField] private float defenceAngle = 120f;
 
     [Header("Movement")]
     [SerializeField] private float defautMoveSpeed;
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour
     private bool attacking;
     [SerializeField] private float hitboxDuration;
     private float hitboxDurationDelta;
-    private bool hitboxActive => hitboxDurationDelta > 0;
+    private bool hitboxActive = false;
     [SerializeField] private SwordHitbox swordHitbox;
 
     [Header("Parry")]
@@ -175,8 +177,10 @@ public class PlayerController : MonoBehaviour
     private IEnumerator EnableAttackHitbox()
     {
         swordHitbox.EnableHitbox();
+        hitboxActive = true;
         yield return new WaitForSeconds(hitboxDuration);
         swordHitbox.DisableHitbox();
+        hitboxActive = false;
         attacking = false;
     }
 
@@ -205,34 +209,46 @@ public class PlayerController : MonoBehaviour
     }
 
     //Vector2 in Action<Vector2> is the direction where player is looking
-    public bool TakeDamage(AttackHitInfo hitInfo, Action<Vector2> OnParried)
+    public bool TakeHit(AttackHitInfo hitInfo, Action<Vector2> OnParried)
     {
         if(IsDead)
             return false;
 
-        if(hitInfo.type == AttackHitInfo.AttackType.Projectile && hitboxActive)
-            return false;
-
-        if (parrying)
+        Vector2 directionToAttacker = hitInfo.attackerTransform.position - transform.position;
+        if (Vector2.Angle(directionToAttacker, transform.up) < defenceAngle)
         {
-            OnParried?.Invoke(transform.up);
-            Vector3 parryDireciton = hitInfo.attackerTransform.position - transform.position;
-            Quaternion vfxRotation = Quaternion.FromToRotation(Vector2.up, parryDireciton);
-            float vfxOffset = 0.5f;
-            VFXManager.CreateParryVFX(transform.position + parryDireciton.normalized * vfxOffset, vfxRotation);
-            CameraShakeController.ShakeCamera();
-            return false;
+            if (hitInfo.type == AttackHitInfo.AttackType.Projectile && hitboxActive)
+            {
+                return false;
+            }
+
+            if (parrying)
+            {
+                OnParried?.Invoke(transform.up);
+                Vector3 parryDireciton = hitInfo.attackerTransform.position - transform.position;
+                Quaternion vfxRotation = Quaternion.FromToRotation(Vector2.up, parryDireciton);
+                float vfxOffset = 0.5f;
+                VFXManager.CreateParryVFX(transform.position + parryDireciton.normalized * vfxOffset, vfxRotation);
+                CameraShakeController.ShakeCamera();
+                return false;
+            }
         }
 
+        TakeDamage();
+        return true;
+    }
+
+    private void TakeDamage()
+    {
         if (Invulnerable)
-            return true;
+            return;
 
         IsDead = true;
+        animator.SetParrying(false);
         animator.Die();
         OnPlayerDead?.Invoke();
         AudioManager.PlaySound(SoundType.PlayerDeath);
         ControlledByPlayer = false;
-        return true;
     }
 
     private void InterruptRun()

@@ -37,7 +37,7 @@ public class Arrow : MonoBehaviour
             if (collision.CompareTag("Player"))
             {
                 PlayerController player = PlayerController.Instance;
-                if(player.TakeDamage(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, transform, Vector2.zero), OnParried))
+                if(player.TakeHit(new AttackHitInfo(1, AttackHitInfo.AttackType.Projectile, transform, Vector2.zero), OnParried))
                 {
                     Destroy(gameObject);
                 }
@@ -73,6 +73,7 @@ public class Arrow : MonoBehaviour
         AudioManager.PlaySound(SoundType.ArrowParry);
         Quaternion rotation = Quaternion.FromToRotation(Vector2.up, deflectDirection);
         VFXManager.CreateParryVFX(transform.position, rotation);
+        CameraShakeController.ShakeCamera();
 
         Destroy(gameObject);
     }
